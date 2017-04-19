@@ -4,6 +4,10 @@ Web-facing end of SLmod, to be paired with my other repo TODO UPLOAD
 
 ## Usage
 
+Edit config.js according to your needs. There you can make your own set of tokens for authorization purposes
+each game server that runs my sister app TODO can send its SlmodStats.lua table to this server
+but they need one of the tokens you generate in this file
+
 Runs server on local port 4000, accepts POSTS to /api/dcs/slmod/update and /api/web/fetch directories
 Latter route is for other repo to upload json to,
 and latter route is for the web server to query the json via ajax request.
