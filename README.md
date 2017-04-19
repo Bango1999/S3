@@ -1,16 +1,16 @@
 ## Synopsis
 
-Web-facing end of SLmod, to be paired with my other repo TODO UPLOAD
+Web-facing end of SLmod, to be paired with my other repo [SLmod Stats Cron](https://github.com/Bango1999/SLSC), which runs locally on each game server, waiting for new data to send to this server
 
 ## Usage
 
 Edit config.js according to your needs. There you can make your own set of tokens for authorization purposes
-each game server that runs my sister app TODO can send its SlmodStats.lua table to this server
+each game server that runs [SLmod](https://github.com/mrSkortch/DCS-SLmod) and [SLmod Stats Cron](https://github.com/Bango1999/SLSC), it can send its SlmodStats.lua table to this server
 but they need one of the tokens you generate in this file
 
-Runs server on local port 4000, accepts POSTS to /api/dcs/slmod/update and /api/web/fetch directories
-Latter route is for other repo to upload json to,
-and latter route is for the web server to query the json via ajax request.
+Runs web server on local port 4000, accepts POSTS to /api/dcs/slmod/update and /api/web/fetch directories
+Former route is for other repo to upload json to,
+Latter route is for the web server to query the json via ajax request.
 
 access localhost:4000 to see the client end
 
@@ -31,9 +31,8 @@ npm start
 
 ## API Reference
 
-/api/dcs/slmod/update   {POST json to server}
-/api/web/fetch          {POST json to client}
-
+/api/dcs/slmod/update sends {POST json to server}
+/api/web/fetch sends {POST json to client}
 
 ## License
 
