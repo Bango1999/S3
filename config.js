@@ -4,18 +4,18 @@
     then give them each a token. You will need to share
     the id and token manually to its respective game server
 */
-const var tokens = {
+const tokens = {
   "0": "token_for_server_0",
   "1": "token_for_server_1"
 }
 
 //default: db
 //what do you want to call your database?
-const var databaseName = 'db';
+const databaseName = 'db';
 
 //default: db_backup
 //what do you want to call your backup database?
-const var backupDatabaseName = 'db_backup';
+const backupDatabaseName = 'db_backup';
 
 module.exports = {
   getTokens: function() {

@@ -134,7 +134,7 @@ $(document).ready(function() {
   function breakout(node, stat) {
     switch (stat) {
       case 'Hours':
-        return (Math.floor(node['total']/1200) + ' hours');
+        return (Math.floor(node['total']/3600) + ' hours');
         break;
       case 'Kills':
         return node['total'];

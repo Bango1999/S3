@@ -1,11 +1,11 @@
 const jsondb = require('node-json-db');
 const CONFIG = require('../config.js');
 
-function updateTokens(tokens) {
+function updateTokens() {
   var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
-  db.push('/token',tokens); //make sure tokens is recent
+  db.push('/token',CONFIG.getTokens());
 }
-updateTokens(tokens);
+updateTokens(); //do it now
 
 //helper function authorizeToken:
 //makes sure the update is valid
