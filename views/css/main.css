@@ -1,0 +1,40 @@
+#servers {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.clear {
+  clear:both;
+}
+
+.larger {
+  font-size: 1.3em;
+}
+
+#patch {
+  width: 90%;
+  text-align: center;
+}
+
+.table-links a:hover {
+  cursor: pointer;
+}
+
+.jumbotron h2 {
+  text-align:center;
+}
+
+.server-list-row {
+  text-align: center;
+  border-bottom: 1px solid black;
+  padding: 10px;
+  font-size:1.3em;
+}
+
+.server-list-row-header {
+  text-align: center;
+  padding: 5px;
+  font-size: 1.5em;
+  border: 1px solid black;
+  background: #ccc;
+}
