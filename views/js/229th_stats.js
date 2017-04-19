@@ -28,17 +28,17 @@ $(document).ready(function() {
     servers.append(
       $('<div></div>').addClass('row').addClass('server-list-row-header')
         .append(
-          $('<div></div>').text('Server List').addClass('col-md-8')
+          $('<div></div>').text('Server List').addClass('col-md-8 col-sm-8 col-xs-8')
         ).append(
-          $('<div></div>').text('Actions').addClass('col-md-4')
+          $('<div></div>').text('Actions').addClass('col-md-4 col-sm-4 col-xs-4')
         )
     );
     for (var i in data) { //for each server
       servers.append(
         $('<div></div>').addClass('row').addClass('server-list-row').append(
-          $('<div></div>').text(data[i]['name']).addClass('col-md-8') //add the row for server
+          $('<div></div>').text(data[i]['name']).addClass('col-md-8 col-sm-8 col-xs-8') //add the row for server
         ).append( //add actions
-          $('<div></div>').addClass('table-links').addClass('col-md-4')
+          $('<div></div>').addClass('table-links').addClass('col-md-4 col-sm-4 col-xs-4')
             .append($('<a></a>').attr({'data-id':i}).text('Hours'))
             .append($('<span></span>').text(' | '))
             .append($('<a></a>').attr({'data-id':i}).text('Kills'))
@@ -79,8 +79,25 @@ $(document).ready(function() {
     }
   }
 
-//builds a list of columns to use in the table
-//based on relevance and lots of looping (should only run once)
+  // function removeNumberedIndices(node) {
+  //   var newnode = {};
+  //   //console.log(node);
+  //   for (var i in node) {
+  //     //console.log(i);
+  //     if (isNaN(i)) {
+  //       //console.log(i + ' is not an int');
+  //       newnode[i] = node[i];
+  //     } else {
+  //       //console.log(i+' is int');
+  //     }
+  //   }
+  //   console.log('newnode');
+  //   console.log(newnode);
+  //   return newnode;
+  // }
+
+  //builds a list of columns to use in the table
+  //based on relevance and lots of looping (should only run once)
   function buildColumns(attrs, id) {
     var cols = []; //will hold column names
     cols.push('Pilot'); //get pilot without looping
@@ -94,21 +111,28 @@ $(document).ready(function() {
             //console.log('we want everything from ' + attr);
             for (var realcol in json[id]['stats'][pid][attr]) { //push all cols
               //console.log('-------> ' + realcol);
-              var add = true;
-              for (var index in cols) { //for each column weve got so far
-                if (cols[index] == realcol) { //check if we already have it
-                  add = false;
-                  break;
+              if (isNaN(realcol)) { //dont add it if its column name is going to be a number
+                //console.log('not int');
+                var add = true;
+                for (var index in cols) { //for each column weve got so far
+                  if (cols[index] == realcol) { //check if we already have it
+                    add = false;
+                    break;
+                  }
                 }
-              }
-              if (add) { //if its not already in the list, add it
-                cols.push(realcol);
+                if (add) { //if its not already in the list, add it
+                  cols.push(realcol);
+                }
+              } else {
+                //console.log(realcol+' is a number');
               }
             }
           }
         }
       }
     }
+    //console.log('cols');
+    //console.log(cols);
     return cols;
   }
 
@@ -134,7 +158,7 @@ $(document).ready(function() {
   function breakout(node, stat) {
     switch (stat) {
       case 'Hours':
-        return (Math.floor(node['total']/3600) + ' hours');
+        return (Math.floor(node['total']/3600));
         break;
       case 'Kills':
         return node['total'];
@@ -150,6 +174,7 @@ $(document).ready(function() {
     switch (typeof node) {
       case 'object':
         //return JSON.stringify(node);
+        //node = removeNumberedIndices(node);
         return breakout(node, stat);
         break;
       case 'undefined':
@@ -182,13 +207,13 @@ $(document).ready(function() {
     //console.log('generating placeholder data');
     var data = generateTablePlaceholderData(cols);
     var incrementer = 0;
-    console.log('stats[]'+incrementer);
-    console.log(json[id]);
+    //console.log('stats[]'+incrementer);
+    //console.log(json[id]);
     for (var pid in json[id]['stats']) { //run through every player node
       //console.log('pid='+pid);
       var name = findOfficialName(json[id]['stats'][pid]['names']);
-      console.log('found official name');
-      console.log(name);
+      //console.log('found official name');
+      //console.log(name);
       data['Pilot'][incrementer] = name; //add their name to the list always
       for (var attr in json[id]['stats'][pid]) { //for every name like 'times'
         //console.log('-> '+attr);
@@ -198,8 +223,10 @@ $(document).ready(function() {
           if (attr == attrs[i]) { //see if we want something from here
             //console.log('we want everything from ' + attr);
             for (var realcol in json[id]['stats'][pid][attr]) { //push all cols
-              //console.log('-------> ' + realcol);
-              data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol];
+              if (isNaN(realcol)) {
+                //console.log('-------> ' + realcol);
+                data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol];
+              }
             }
           }
         }
@@ -222,7 +249,6 @@ $(document).ready(function() {
     table.html('').attr({'class': 'table datatable'});
     generateTableHeader(table, cols)
     generateTableContent(table, serverId, stat, cols)
-    console.log('done');
     //something something datatable
     $('.datatable tr').first().wrap('<thead></thead>');
     datatable = table.DataTable();

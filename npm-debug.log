@@ -1,33 +1,35 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
-2 info using npm@3.10.3
-3 info using node@v6.6.0
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'start' ]
+2 info using npm@3.9.5
+3 info using node@v6.2.2
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info lifecycle S3@1.0.0~prestart: S3@1.0.0
 6 silly lifecycle S3@1.0.0~prestart: no script for prestart, continuing
 7 info lifecycle S3@1.0.0~start: S3@1.0.0
 8 verbose lifecycle S3@1.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle S3@1.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/var/www/flighthrs/S3/node_modules/.bin:/usr/local/bin:/home/swan/bin:/home/swan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-10 verbose lifecycle S3@1.0.0~start: CWD: /var/www/flighthrs/S3
-11 silly lifecycle S3@1.0.0~start: Args: [ '-c', 'node server.js' ]
+9 verbose lifecycle S3@1.0.0~start: PATH: C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\users\Bango\Documents\S3\node_modules\.bin;C:\Program Files\nodejs;C:\cygwin64\usr\local\bin;C:\cygwin64\bin;C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Broadcom\Broadcom 802.11 Network Adapter;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Program Files\WIDCOMM\Bluetooth Software;C:\Program Files\WIDCOMM\Bluetooth Software\syswow64;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\cygwin64\bin;C:\wamp\bin\php\php5.5.12;C:\HashiCorp\Vagrant\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\wamp\www\goodtogo-admin-ui\node_modules\bower\bin;C:\ProgramData\ComposerSetup\bin;D:\OpenWRT\OpenVPN\bin;C:\Program Files (x86)\Skype\Phone;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Users\Bango\AppData\Local\atom\bin;C:\Program Files\Docker Toolbox;C:\Program Files\Boot2Docker for Windows;C:\Users\Bango\AppData\Roaming\npm;C:\Users\Bango\AppData\Roaming\Composer\vendor\bin;D:\SSH_Client
+10 verbose lifecycle S3@1.0.0~start: CWD: C:\users\Bango\Documents\S3
+11 silly lifecycle S3@1.0.0~start: Args: [ '/d /s /c', 'node server.js' ]
 12 silly lifecycle S3@1.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle S3@1.0.0~start: Failed to exec start script
 14 verbose stack Error: S3@1.0.0 start: `node server.js`
 14 verbose stack Exit status 1
-14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:242:16)
+14 verbose stack     at EventEmitter.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\lifecycle.js:245:16)
 14 verbose stack     at emitTwo (events.js:106:13)
 14 verbose stack     at EventEmitter.emit (events.js:191:7)
-14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at ChildProcess.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\spawn.js:24:14)
 14 verbose stack     at emitTwo (events.js:106:13)
 14 verbose stack     at ChildProcess.emit (events.js:191:7)
-14 verbose stack     at maybeClose (internal/child_process.js:877:16)
-14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+14 verbose stack     at maybeClose (internal/child_process.js:852:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:215:5)
 15 verbose pkgid S3@1.0.0
-16 verbose cwd /var/www/flighthrs/S3
-17 error Linux 4.4.0-72-generic
-18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
-19 error node v6.6.0
-20 error npm  v3.10.3
+16 verbose cwd C:\users\Bango\Documents\S3
+17 error Windows_NT 6.3.9600
+18 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
+19 error node v6.2.2
+20 error npm  v3.9.5
 21 error code ELIFECYCLE
 22 error S3@1.0.0 start: `node server.js`
 22 error Exit status 1
