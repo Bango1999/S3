@@ -31,8 +31,8 @@ npm start
 
 ## API Reference
 
-/api/dcs/slmod/update sends {POST json to server}
-/api/web/fetch sends {POST json to client}
+/api/dcs/slmod/update -> sends POST json to server<br />
+/api/web/fetch -> sends POST json to client
 
 ## License
 
