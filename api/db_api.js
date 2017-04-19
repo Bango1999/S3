@@ -1,10 +1,17 @@
 const jsondb = require('node-json-db');
+const CONFIG = require('../config.js');
+
+function updateTokens(tokens) {
+  var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
+  db.push('/token',tokens); //make sure tokens is recent
+}
+updateTokens(tokens);
 
 //helper function authorizeToken:
 //makes sure the update is valid
 function authorizeToken(id, token) {
   //console.log('id='+id+'token='+token);
-  var db = new jsondb('api/db/flight_db', true, true);
+  var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
   var tokens = db.getData('/token');
   for (var i in tokens) {
     if (token == tokens[i] && i == id) {
@@ -29,9 +36,8 @@ function updateJson(json) {
     //The second argument is used to tell the DB to save after each push
     //If you put false, you'll have to call the save() method.
     //The third argument is to ask JsonDB to save the database in an human readable format. (default false)
-  var db = new jsondb('api/db/flight_db', true, true);
-  //db.push('/token',{"0": "token","1":"token1"});
-  var backupdb = new jsondb('api/db/flight_backup_db', true, true);
+  var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
+  var backupdb = new jsondb('api/db/'+CONFIG.getBDB(), true, true);
   try {
     var prevjson = db.getData('/');
   } catch(error) {
@@ -60,7 +66,7 @@ function deTokenize(json) {
 //returns the server json currently stored in the main db
 function getJson() {
   var relevant = [];
-  var fdb = new jsondb('api/db/test', true, true);
+  var fdb = new jsondb('api/db/'+CONFIG.getDB(), true, true);
   var json = fdb.getData('/server');
   return deTokenize(json);
 }
