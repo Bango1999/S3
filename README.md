@@ -5,7 +5,7 @@ Web-facing end of SLmod, to be paired with my other repo [SLmod Stats Cron](http
 ## Usage
 
 Edit config.js according to your needs. There you can make your own set of tokens for authorization purposes
-each game server that runs [SLmod](https://github.com/mrSkortch/DCS-SLmod) and [SLmod Stats Cron](https://github.com/Bango1999/SLSC) & [SLmod_S3](https://github.com/Bango1999/SLmod_S3), it can send its SlmodStats.lua table to this server
+each game server that runs [SLmod_S3](https://github.com/Bango1999/SLmod_S3) and [SLmod Stats Cron](https://github.com/Bango1999/SLSC), it can send its SlmodStats.lua table to this server
 but they need one of the tokens you generate in this file
 
 Runs web server on local port 4000, accepts POSTS to /api/dcs/slmod/update and /api/web/fetch directories
