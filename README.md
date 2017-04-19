@@ -24,9 +24,9 @@ This could help IP's see logged hours, or just let people go and see their kills
 
 ## Installation
 
-install nodejs and npm if not already done
-cd to repo
-npm update
+install nodejs and npm if not already done<br />
+cd to repo<br />
+npm update<br />
 npm start
 
 ## API Reference
