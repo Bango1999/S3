@@ -62,13 +62,20 @@ function deTokenize(json) {
   return json;
 }
 
+//helper function addAircraft:
+//adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
+function addAircraft(json) {
+  json['whitelist'] = CONFIG.getAircraft();
+  return json;
+}
+
 //helper function getJson:
 //returns the server json currently stored in the main db
 function getJson() {
   var relevant = [];
   var fdb = new jsondb('api/db/'+CONFIG.getDB(), true, true);
   var json = fdb.getData('/server');
-  return deTokenize(json);
+  return addAircraft(deTokenize(json));
 }
 
 module.exports = {

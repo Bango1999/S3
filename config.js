@@ -7,19 +7,69 @@
 const tokens = {
   "0": "token_for_server_0",
   "1": "token_for_server_1"
-}
+};
 
-//default: db
-//what do you want to call your database?
+
+/*
+   AIRCRAFT STATS WHITELIST
+    you dont want a column for every aircraft, or your table will be too wide.
+    comment out aircraft you dont want included in the hours list
+
+    BE SURE that there is no comma after the ending aircraft
+*/
+const aircraft = [
+  // "CA", //combined arms
+  // "IL-76MD",
+  // "MiG-21Bis",
+  // "AJS37",
+  // "Su-25",
+  // "Su-27",
+  // "MiG-29S",
+  // "FW-190D9",
+  // "MiG-15bis",
+  // "ah-64d",
+  // "SpitfireLFMkIX",
+  // "L-39C",
+  // "MiG-29A",
+  // "L-39ZA",
+  // "M-2000C",
+  // "Su-25T",
+  // "Bf-109K-4",
+  // "F-5E-3",
+  // "F-15C",
+  // "F-86F Sabre",
+  // "P-51D",
+  // "A-10C",
+  // "CobraH",
+  "SA342M",
+  "SA342L",
+  "UH-1H",
+  "Ka-50",
+  "Mi-8MT",
+];
+
+
+// default: db
+// what do you want to call your database?
 const databaseName = 'db';
 
-//default: db_backup
-//what do you want to call your backup database?
+// default: db_backup
+// what do you want to call your backup database?
 const backupDatabaseName = 'db_backup';
+
+
+//----------------------------------------------
+//DO NOT EDIT PAST THIS LINE
+
+
+
 
 module.exports = {
   getTokens: function() {
     return tokens
+  },
+  getAircraft: function() {
+    return aircraft
   },
   getDB: function() {
     return databaseName

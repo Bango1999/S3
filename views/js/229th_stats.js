@@ -36,18 +36,20 @@ $(document).ready(function() {
         )
     );
     for (var i in data) { //for each server
-      servers.append(
-        $('<div></div>').addClass('row').addClass('server-list-row').append(
-          $('<div></div>').text(data[i]['name']).addClass('col-md-8 col-sm-8 col-xs-8') //add the row for server
-        ).append( //add actions
-          $('<div></div>').addClass('table-links').addClass('col-md-4 col-sm-4 col-xs-4')
-            .append($('<a></a>').attr({'data-id':i}).text('Hours'))
-            .append($('<span></span>').text(' | '))
-            .append($('<a></a>').attr({'data-id':i}).text('Kills'))
-            .append($('<span></span>').text(' | '))
-            .append($('<a></a>').attr({'data-id':i}).text('Deaths'))
-        )
-      );
+      if (i !== 'whitelist') {
+        servers.append(
+          $('<div></div>').addClass('row').addClass('server-list-row').append(
+            $('<div></div>').text(data[i]['name']).addClass('col-md-8 col-sm-8 col-xs-8') //add the row for server
+          ).append( //add actions
+            $('<div></div>').addClass('table-links').addClass('col-md-4 col-sm-4 col-xs-4')
+              .append($('<a></a>').attr({'data-id':i}).text('Hours'))
+              .append($('<span></span>').text(' | '))
+              .append($('<a></a>').attr({'data-id':i}).text('Kills'))
+              .append($('<span></span>').text(' | '))
+              .append($('<a></a>').attr({'data-id':i}).text('Deaths'))
+          )
+        );
+      }
     }
     //console.log('updated servers table');
   }
@@ -70,8 +72,7 @@ $(document).ready(function() {
   }
 
    function inHelis(str) {
-	  var helicopters = ["SA342M","SA342L","UH-1H","Ka-50","Mi-8MT","CA"];
-	  return (helicopters.indexOf(str) != -1)
+	  return (json['whitelist'].indexOf(str) != -1);
   }
 
   //return the 229th name if found
@@ -231,15 +232,15 @@ $(document).ready(function() {
             //console.log('we want everything from ' + attr);
             for (var realcol in json[id]['stats'][pid][attr]) { //push 'all' cols
               if (isNaN(realcol)) { //as long as its not a number
-				  if (stat == 'Hours') { //and if its for an hours table
-					if (inHelis(realcol)) { //only include whitelisted vehicles
-						//console.log('-------> ' + realcol);
-						data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //make it so
-					}
-				  } else {
-					  data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //not a number, not for hours, cool with me
-				  }
-
+      				  if (stat == 'Hours') { //and if its for an hours table
+                  //console.log(realcol);
+        					if (inHelis(realcol)) { //only include whitelisted vehicles
+        						//console.log('-------> ' + realcol);
+        						data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //make it so
+        					}
+      				  } else {
+      					  data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //not a number, not for hours, cool with me
+      				  }
               }
             }
           }
