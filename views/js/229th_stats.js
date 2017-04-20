@@ -20,6 +20,8 @@ $(document).ready(function() {
      console.log(error);
     }
   });
+  
+  //TODO make loading bar
 
   //make the header that lets you choose which table to render
   //choose server, choose stat to view
