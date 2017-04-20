@@ -7,7 +7,7 @@ const CONFIG = require(path.join(__dirname, 'config.js'));
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json({limit:'5mb'}));
+app.use(bodyParser.json({limit:CONFIG.getPostJsonSizeLimit()}));
 app.use('/js', express.static(path.join(__dirname, 'views/js')));
 app.use('/css', express.static(path.join(__dirname, 'views/css')));
 app.use('/assets', express.static(path.join(__dirname, 'views/assets')));

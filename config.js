@@ -72,11 +72,16 @@ const aircraft = [
 ];
 
 
-// default: db
+// default: '5mb'
+// This needs to be sufficiently large to fit a growing slmod dataset
+const postJsonSizeLimit = '5mb';
+
+
+// default: 'db'
 // what do you want to call your database?
 const databaseName = 'db';
 
-// default: db_backup
+// default: 'db_backup'
 // what do you want to call your backup database?
 const backupDatabaseName = 'db_backup';
 
@@ -102,6 +107,9 @@ module.exports = {
   },
   getAircraft: function() {
     return aircraft
+  },
+  getPostJsonSizeLimit: function() {
+    return postJsonSizeLimit
   },
   getDB: function() {
     return databaseName
