@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const API = require(path.join(__dirname, 'api/db_api.js'));
 const port = 4000;
+const name = '229th Server Stats';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit:'5mb'}));
@@ -15,19 +16,17 @@ app.set('view engine', 'ejs');
 //index page
 app.get('/', (req, res) => {
     var title = "S3 229th";
-    var h1text = "229th Server Stats";
     res.render('html/index', {
         title: title,
-        h1text: h1text
+        name: name
     });
 });
 //about page
 app.get('/about', (req, res) => {
   var title = "S3 About";
-  var h1text = "About S3";
   res.render('html/about', {
       title: title,
-      h1text: h1text
+      name: name
   });
 });
 
