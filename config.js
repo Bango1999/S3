@@ -1,8 +1,32 @@
+
+// default: '229th Server Stats'
+// what do you want to call your Web Server?
+const name = '229th Server Stats';
+
+
+
+// default: 4000
+// on what port should I host your Web Server?
+const port = 4000;
+
+
+
+// default: 'patch.png'
+// what is the name of the image you have stored in views/assets
+//  that will be displayed in the page header
+const logo = 'patch.png';
+
+
+
 /*
   EDIT TOKENS BELOW ACCORDING TO YOUR NEEDS
     i.e. if you have 2 game servers posting to this app
     then give them each a token. You will need to share
     the id and token manually to its respective game server
+
+    default:
+      "0": "token_for_server_0",
+      "1": "token_for_server_1"
 */
 const tokens = {
   "0": "token_for_server_0",
@@ -10,12 +34,11 @@ const tokens = {
 };
 
 
+
 /*
    AIRCRAFT STATS WHITELIST
     you dont want a column for every aircraft, or your table will be too wide.
     comment out aircraft you dont want included in the hours list
-
-    BE SURE that there is no comma after the ending aircraft
 */
 const aircraft = [
   // "CA", //combined arms
@@ -45,7 +68,7 @@ const aircraft = [
   "SA342L",
   "UH-1H",
   "Ka-50",
-  "Mi-8MT",
+  "Mi-8MT"
 ];
 
 
@@ -65,6 +88,15 @@ const backupDatabaseName = 'db_backup';
 
 
 module.exports = {
+  getName: function() {
+    return name
+  },
+  getLogo: function() {
+    return logo
+  },
+  getPort: function() {
+    return port
+  },
   getTokens: function() {
     return tokens
   },

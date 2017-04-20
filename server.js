@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const API = require(path.join(__dirname, 'api/db_api.js'));
-const port = 4000;
-const name = '229th Server Stats';
+const CONFIG = require(path.join(__dirname, 'config.js'));
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit:'5mb'}));
@@ -15,18 +15,17 @@ app.set('view engine', 'ejs');
 
 //index page
 app.get('/', (req, res) => {
-    var title = "S3 229th";
     res.render('html/index', {
-        title: title,
-        name: name
+        title: 'S3 ' + CONFIG.getName(),
+        name: CONFIG.getName(),
+        logo: CONFIG.getLogo()
     });
 });
 //about page
 app.get('/about', (req, res) => {
-  var title = "S3 About";
   res.render('html/about', {
-      title: title,
-      name: name
+      title: 'S3 About',
+      name: CONFIG.getName()
   });
 });
 
@@ -56,6 +55,6 @@ app.post('/api/dcs/slmod/update', (req, res) => {
 });
 
 //serve app
-app.listen(port, function() {
-  console.log('listening on '+port);
+app.listen(CONFIG.getPort() || 4000, function() {
+  console.log('listening on ' + CONFIG.getPort());
 });
