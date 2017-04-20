@@ -1,9 +1,10 @@
 main {font-family: 'Slabo 27px', serif;}
+.btn {font-family:'Open Sans', sans-serif}
 .larger {font-size: 1.5em;}
 .clear {clear:both;}
 .table-links a:hover {cursor: pointer;}
 .jumbotron h2 {text-align:center;}
-.rubik {font-family: 'Rubik', sans-serif;}
+.server-name {font-family: 'Archivo Black', sans-serif;}
 .datatable {
   font-family: 'Open Sans', sans-serif;
   font-size: 1em;
