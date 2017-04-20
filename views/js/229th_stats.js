@@ -77,7 +77,7 @@ $(document).ready(function() {
   //return the 229th name if found
   function findOfficialName(names) {
     for (var i in names) {
-      if (names[i].indexOf('229') >= 0) {
+      if (names[i].indexOf('/229)') > 1) {
         return names[i];
       }
     }
