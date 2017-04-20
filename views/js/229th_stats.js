@@ -66,6 +66,11 @@ $(document).ready(function() {
         return false;
     }
   }
+  
+   function inHelis(str) {
+	  var helicopters = ["SA342M","SA342L","UH-1H","Ka-50","Mi-8MT","CA"];
+	  return (helicopters.indexOf(str) != -1)
+  }
 
   //return the 229th name if found
   function findOfficialName(names) {
@@ -78,23 +83,6 @@ $(document).ready(function() {
       return names[i];
     }
   }
-
-  // function removeNumberedIndices(node) {
-  //   var newnode = {};
-  //   //console.log(node);
-  //   for (var i in node) {
-  //     //console.log(i);
-  //     if (isNaN(i)) {
-  //       //console.log(i + ' is not an int');
-  //       newnode[i] = node[i];
-  //     } else {
-  //       //console.log(i+' is int');
-  //     }
-  //   }
-  //   console.log('newnode');
-  //   console.log(newnode);
-  //   return newnode;
-  // }
 
   //builds a list of columns to use in the table
   //based on relevance and lots of looping (should only run once)
@@ -111,22 +99,10 @@ $(document).ready(function() {
             //console.log('we want everything from ' + attr);
             for (var realcol in json[id]['stats'][pid][attr]) { //push all cols
               //console.log('-------> ' + realcol);
-			  
-			  if (isNaN(realcol)) { //as long as its not a number
-				  if (stat == 'Hours') { //and if its for an hours table
-					if (inHelis(realcol)) { //only include whitelisted vehicles
-						//console.log('-------> ' + realcol);
-						data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //make it so
-					}
-				  } else {
-					  data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //not a number, not for hours, cool with me
-				  }
-                
-              }
-			  
               if (isNaN(realcol)) { //dont add it if its column name is going to be a number
                 //console.log('not int');
 				if (stat == 'Hours') {
+					console.log(realcol);
 					if (inHelis(realcol)) { //only include whitelisted vehicles
 						var add = true;
 						for (var index in cols) { //for each column weve got so far
@@ -228,11 +204,6 @@ $(document).ready(function() {
       }
       $('.datatable tbody').append(htmlRow);
     }
-  }
-  
-  function inHelis(str) {
-	  var helicopters = ["SA342M","SA342L","UH-1H","KA-50","Mi8MT"];
-	  return (helicopters.indexOf(str) != -1)
   }
 
   //makes json into an array of content for a table
