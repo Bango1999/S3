@@ -20,7 +20,7 @@ $(document).ready(function() {
      console.log(error);
     }
   });
-  
+
   //TODO make loading bar
 
   //make the header that lets you choose which table to render
@@ -68,7 +68,7 @@ $(document).ready(function() {
         return false;
     }
   }
-  
+
    function inHelis(str) {
 	  var helicopters = ["SA342M","SA342L","UH-1H","Ka-50","Mi-8MT","CA"];
 	  return (helicopters.indexOf(str) != -1)
@@ -104,7 +104,7 @@ $(document).ready(function() {
               if (isNaN(realcol)) { //dont add it if its column name is going to be a number
                 //console.log('not int');
 				if (stat == 'Hours') {
-					console.log(realcol);
+					//console.log(realcol);
 					if (inHelis(realcol)) { //only include whitelisted vehicles
 						var add = true;
 						for (var index in cols) { //for each column weve got so far
@@ -129,7 +129,7 @@ $(document).ready(function() {
 					  cols.push(realcol);
 					}
 				}
-              
+
               } else {
                 //console.log(realcol+' is a number');
               }
@@ -239,7 +239,7 @@ $(document).ready(function() {
 				  } else {
 					  data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //not a number, not for hours, cool with me
 				  }
-                
+
               }
             }
           }
