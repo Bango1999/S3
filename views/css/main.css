@@ -1,9 +1,13 @@
-main {font-family: 'Slabo', serif; font-size: 1.1em;}
+main {font-family: 'Slabo 27px', serif; font-size: 1.1em;}
 .larger {font-size: 1.5em;}
 .clear {clear:both;}
 .table-links a:hover {cursor: pointer;}
 .jumbotron h2 {text-align:center;}
 .rubik {font-family: 'Rubik', sans-serif;}
+.datatable {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+}
 .blackops {
   font-family: 'Black Ops One', cursive;
   font-size: 2em;
