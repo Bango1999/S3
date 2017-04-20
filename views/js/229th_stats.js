@@ -98,7 +98,7 @@ $(document).ready(function() {
 
   //builds a list of columns to use in the table
   //based on relevance and lots of looping (should only run once)
-  function buildColumns(attrs, id) {
+  function buildColumns(attrs, id, stat) {
     var cols = []; //will hold column names
     cols.push('Pilot'); //get pilot without looping
     for (var pid in json[id]['stats']) { //run through every player node
@@ -111,18 +111,47 @@ $(document).ready(function() {
             //console.log('we want everything from ' + attr);
             for (var realcol in json[id]['stats'][pid][attr]) { //push all cols
               //console.log('-------> ' + realcol);
+			  
+			  if (isNaN(realcol)) { //as long as its not a number
+				  if (stat == 'Hours') { //and if its for an hours table
+					if (inHelis(realcol)) { //only include whitelisted vehicles
+						//console.log('-------> ' + realcol);
+						data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //make it so
+					}
+				  } else {
+					  data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //not a number, not for hours, cool with me
+				  }
+                
+              }
+			  
               if (isNaN(realcol)) { //dont add it if its column name is going to be a number
                 //console.log('not int');
-                var add = true;
-                for (var index in cols) { //for each column weve got so far
-                  if (cols[index] == realcol) { //check if we already have it
-                    add = false;
-                    break;
-                  }
-                }
-                if (add) { //if its not already in the list, add it
-                  cols.push(realcol);
-                }
+				if (stat == 'Hours') {
+					if (inHelis(realcol)) { //only include whitelisted vehicles
+						var add = true;
+						for (var index in cols) { //for each column weve got so far
+						  if (cols[index] == realcol) { //check if we already have it
+							add = false;
+							break;
+						  }
+						}
+						if (add) { //if its not already in the list, add it
+						  cols.push(realcol);
+						}
+					}
+				} else {
+					var add = true;
+					for (var index in cols) { //for each column weve got so far
+					  if (cols[index] == realcol) { //check if we already have it
+						add = false;
+						break;
+					  }
+					}
+					if (add) { //if its not already in the list, add it
+					  cols.push(realcol);
+					}
+				}
+              
               } else {
                 //console.log(realcol+' is a number');
               }
@@ -200,6 +229,11 @@ $(document).ready(function() {
       $('.datatable tbody').append(htmlRow);
     }
   }
+  
+  function inHelis(str) {
+	  var helicopters = ["SA342M","SA342L","UH-1H","KA-50","Mi8MT"];
+	  return (helicopters.indexOf(str) != -1)
+  }
 
   //makes json into an array of content for a table
   function generateTableContent(table, id, stat, cols) {
@@ -222,10 +256,17 @@ $(document).ready(function() {
           //console.log('--> '+attrs[i]);
           if (attr == attrs[i]) { //see if we want something from here
             //console.log('we want everything from ' + attr);
-            for (var realcol in json[id]['stats'][pid][attr]) { //push all cols
-              if (isNaN(realcol)) {
-                //console.log('-------> ' + realcol);
-                data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol];
+            for (var realcol in json[id]['stats'][pid][attr]) { //push 'all' cols
+              if (isNaN(realcol)) { //as long as its not a number
+				  if (stat == 'Hours') { //and if its for an hours table
+					if (inHelis(realcol)) { //only include whitelisted vehicles
+						//console.log('-------> ' + realcol);
+						data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //make it so
+					}
+				  } else {
+					  data[realcol][incrementer] = json[id]['stats'][pid][attr][realcol]; //not a number, not for hours, cool with me
+				  }
+                
               }
             }
           }
@@ -245,7 +286,7 @@ $(document).ready(function() {
       //console.log('cant destroy');
     }
     var table = $('.datatable');
-    var cols = buildColumns(getRelevantAttrs(stat), serverId);
+    var cols = buildColumns(getRelevantAttrs(stat), serverId, stat);
     table.html('').attr({'class': 'table datatable'});
     generateTableHeader(table, cols)
     generateTableContent(table, serverId, stat, cols)
