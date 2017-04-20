@@ -8,9 +8,9 @@ const name = '229th Server Stats';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit:'5mb'}));
-app.use('/js', express.static('views/js'));
-app.use('/css', express.static('views/css'));
-app.use('/assets', express.static('views/assets'));
+app.use('/js', express.static(path.join(__dirname, 'views/js')));
+app.use('/css', express.static(path.join(__dirname, 'views/css')));
+app.use('/assets', express.static(path.join(__dirname, 'views/assets')));
 app.set('view engine', 'ejs');
 
 //index page
