@@ -1,6 +1,8 @@
 ## Synopsis
 
-Web-facing end of SLmod, to be paired with my other repo [SLmod Stats Cron](https://github.com/Bango1999/SLSC), which runs locally on each DCS game server which is running my modded version of SLmod, [SLmod_S3](https://github.com/Bango1999/SLmod_S3), waiting for new data to send to this server
+Web-facing end of SLmod, to be paired with my other repo [SLmod Stats Cron](https://github.com/Bango1999/SLSC), which runs locally on each DCS game server which is running my modded version of SLmod, [SLmod_S3](https://github.com/Bango1999/SLmod_S3), waiting for new data to send to this server.
+
+[See the Demo](http://1stcav.servegame.com:229/)
 
 ## Usage
 
