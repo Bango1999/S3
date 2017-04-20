@@ -163,7 +163,7 @@ $(document).ready(function() {
   function breakout(node, stat) {
     switch (stat) {
       case 'Hours':
-        return (Math.floor(node['total']/3600));
+        return (Math.round((100*node['total']/3600))/100);
         break;
       case 'Kills':
         return node['total'];
@@ -183,7 +183,7 @@ $(document).ready(function() {
         return breakout(node, stat);
         break;
       case 'undefined':
-        return '';
+        return '0';
         break;
       default:
         return node.toString();
