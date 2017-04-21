@@ -1,10 +1,19 @@
 const jsondb = require('node-json-db');
 const CONFIG = require('../config.js');
+const LOGGER = require('../logger.js');
+
+//vars for easy logging
+const e = 'error';
+const i = 'info';
+const t = 'task';
+
+const DB = 'api/db/' + CONFIG.getDB();
+const BDB = 'api/db/' + CONFIG.getBDB();
 
 //helper function updateTokens:
 //update tokens in the db with whats in the config
 function updateTokens() {
-  var db = new jsondb('api/db/' + CONFIG.getDB(), true, true);
+  var db = new jsondb(DB, true, true);
   db.push('/token',CONFIG.getTokens());
 }
 updateTokens(); //do it now
@@ -12,14 +21,18 @@ updateTokens(); //do it now
 //helper function authorizeToken:
 //makes sure the update is valid
 function authorizeToken(id, token) {
-  var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
-  var tokens = db.getData('/token');
+  var db = new jsondb(DB, true, true);
+  try { var tokens = db.getData('/token') }
+  catch(err) {
+    LOGGER.log('ERROR: Either the DB "'+ DB + '.json" does not exist, or there is no ["token"] index within it',e);
+    return false; //dont authorize token
+  }
   for (var i in tokens) {
     if (token == tokens[i] && i == id) {
-      return i;
+      return i; //authorize token
     }
   }
-  return false;
+  return false; //dont authorize token
 }
 
 //helper function storejson:
@@ -27,24 +40,21 @@ function authorizeToken(id, token) {
 function updateJson(json) {
   var serverId = authorizeToken(json['id'], json['token']);
   if (serverId === false) {
-    return "Invalid Token, Aborting DB Update";
-  } else { /*console.log('token validated, server ID: ' + serverId);*/ }
-  //console.log('Performing DB update and backup...');
+    return 'Invalid Token, Aborting DB Update';
+  } else { LOGGER.log('Token validated, server ID: ' + serverId, i) }
+  LOGGER.log('Performing DB update and backup...',i);
 
         //The second argument is used to tell the DB to save after each push
         //If you put false, you'll have to call the save() method.
         //The third argument is to ask JsonDB to save the database in an human readable format. (default false)
-  var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
-  var backupdb = new jsondb('api/db/'+CONFIG.getBDB(), true, true);
-  try {
-    var prevjson = db.getData('/');
-  } catch(error) {
-    return error;
-  }
+  var db = new jsondb(DB, true, true);
+  var backupdb = new jsondb(BDB, true, true);
+  try { var prevjson = db.getData('/') }
+  catch(err) { return 'ERROR: Either the DB "'+ DB + '.json" does not exist, or there is no-thing "{}" within it' }
   backupdb.push('/', prevjson);
-  //console.log('Updated Backup DB');
+  LOGGER.log('Updated Backup DB',i);
   db.push('/server/'+json['id'], json);
-  //console.log('Updated Main DB');
+  LOGGER.log('Updated Main DB',i);
       //https://github.com/Belphemur/node-json-db
       //Deleting data
       //db.delete("/info");
@@ -70,11 +80,11 @@ function addAircraft(json) {
 //helper function getJson:
 //returns the server json currently stored in the main db
 function getJson() {
-  var fdb = new jsondb('api/db/'+CONFIG.getDB(), true, true);
+  var fdb = new jsondb(DB, true, true);
   try { var json = fdb.getData('/server') }
   catch(err) {
-    console.log(err);
-    return {};
+    LOGGER.log('ERROR: Either the DB "'+ DB + '.json" does not exist, or there is no ["server"] index within it',e);
+    return false; //return empty object
   }
   return addAircraft(deTokenize(json));
 }
