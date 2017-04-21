@@ -71,6 +71,7 @@ const aircraft = [
   "Mi-8MT"
 ];
 
+//what kind of kill stats do you want?
 const killObjects = [
   // 'Buildings',
   'Planes',
@@ -79,6 +80,7 @@ const killObjects = [
   'Helicopters'
 ];
 
+//what do you want to search to try to find a default player name?
 const handleTag = '229) ';
 
 

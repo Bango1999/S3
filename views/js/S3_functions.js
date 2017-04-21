@@ -52,6 +52,25 @@ $(document).ready(function() {
 
   //------------------------
 
+  //get the nested ids to look in depending on what the user wants to see
+  function getFirstLevelIndices(stat, cols) {
+    switch (stat) {
+      case statTypes[0]:
+        return ['times'];
+        break;
+      case statTypes[1]:
+        return ['kills','friendlyKills','PvP'];
+        break;
+      case statTypes[2]:
+        return ['losses', 'PvP'];
+        break;
+      default:
+        return false;
+    }
+  }
+
+  //------------------------
+
   function showTree() {
     console.log('showTree fn');
     $('#json-tree').removeAttr('style');
@@ -99,26 +118,8 @@ $(document).ready(function() {
     return (Math.round((100*val/3600))/100); //floating pt hours
   }
 
+
   //------------------------
-
-  //get the nested ids to look in depending on what the user wants to see
-  function getFirstLevelIndices(stat, cols) {
-    switch (stat) {
-      case statTypes[0]:
-        return ['times'];
-        break;
-      case statTypes[1]:
-        return ['kills','friendlyKills','PvP'];
-        break;
-      case statTypes[2]:
-        return ['losses', 'PvP'];
-        break;
-      default:
-        return false;
-    }
-  }
-
-//------------------------
 
   function makeDataRows(table, serverId, stat, columns) {
     //loop through player nodes
@@ -129,9 +130,10 @@ $(document).ready(function() {
           //ways
     var firstLevelIndices = getFirstLevelIndices(stat);
     for (var pid in json[serverId]['stats']) { //loop through player nodes
-      var col = 0;
-      for (var fli in json[serverId]['stats'][pid]) {
+      for (var fli in json[serverId]['stats'][pid]) { //loop through stats for player
         if (firstLevelIndices.indexOf(fli) != -1) { //we want something from here
+
+
           //here comes the messy part...
           if ((fli == 'times' && stat == statTypes[0]) || (fli == 'kills' && stat == statTypes[1])) {
             //console.log('times'); //verbatim mappings, key > key
@@ -157,11 +159,13 @@ $(document).ready(function() {
           } else if (fli == 'PvP' && stat == statTypes[2]) { //losses > PvP Deaths
             table[pid][columns[stat].indexOf('PvP Deaths')] = json[serverId]['stats'][pid][fli]['losses'];
           }
+
+
         }
       }
 
     }
-    console.log(table);
+    //console.log(table);
     return table;
   }
 
@@ -173,8 +177,7 @@ $(document).ready(function() {
     table[0] = statColumns[stat];
     for (var player in json[serverId]['stats']) {
       table.push([]);
-      for (var column in statColumns[stat]) {
-        //go ahead and set name column now
+      for (var column in statColumns[stat]) { //go ahead and set name column now
         if (column == 0) { table[parseInt(player)][column] = json[serverId]['stats'][player]['name'] }
         else { table[parseInt(player)][column] = 0 } //if not name, set 0
       }
