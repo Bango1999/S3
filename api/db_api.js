@@ -51,7 +51,7 @@ function setDisplayNames(json) {
   for (var pid in json['stats']) { //for each hashed player node
     var lastName;
     for (var id in json['stats'][pid]['names']) {
-      console.log(json['stats'][pid]['names'][id]);
+      //console.log(json['stats'][pid]['names'][id]);
       var foundOfficial = false;
       if (json['stats'][pid]['names'][id].indexOf(CONFIG.getHandleTag()) != -1) {
         //console.log('found official');
