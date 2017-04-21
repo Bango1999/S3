@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit:CONFIG.getPostJsonSizeLimit()}));
 app.use('/js', express.static(path.join(__dirname, 'views/js')));
 app.use('/css', express.static(path.join(__dirname, 'views/css')));
+app.use('/json_viewer', express.static(__dirname + '/node_modules/jquery.json-viewer/json-viewer/'));
 app.use('/assets', express.static(path.join(__dirname, 'views/assets')));
 app.set('view engine', 'ejs');
 

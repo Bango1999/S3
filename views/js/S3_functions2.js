@@ -1,73 +1,30 @@
 $(document).ready(function() {
-//prolly dont need globals, but were good for 1.0
-var json = {};
-var cols = {};
-var datatable;
-$.ajax({
-  url: "/api/web/fetch",
-  type: "POST",
-  dataType: "json",
-  data: {},
-  success: function(data) {
-    if (data === false) {
-      console.log('ERROR: Server could not return a valid database object.');
-      return;
+  //prolly dont need globals, but were good for 1.0
+  var json = {};
+  var cols = {};
+  var datatable;
+  $.ajax({
+    url: "/api/web/fetch",
+    type: "POST",
+    dataType: "json",
+    data: {},
+    success: function(data) {
+      if (data === false) {
+        console.log('ERROR: Server could not return a valid database object.');
+        return;
+      }
+
+      json = data;
+      updateServersTable(data);
+      $('.table-links').on('click', 'a', function(e) {
+          changeDataTable($(this).attr('data-id'), $(this).text());
+      });
+    },
+    error: function(error) {
+     console.log("Error:");
+     console.log(error);
     }
-
-    json = data;
-    console.log(data);
-    updateServersTable(data);
-    $('.table-links').on('click', 'a', function(e) {
-        //changeDataTable($(this).attr('data-id'), $(this).text());
-        //tableToHTML(tablulate($(this).attr('data-id'), $(this).text()));
-        $('#json-tree').jsonViewer(json, {collapsed: true});
-    });
-  },
-  error: function(err) { console.log(err);
-  }
-});
-
-//------------------------
-
-
-function tabulate(serverId,stat) {
-
-}
-
-//-------------------------
-
-function tableToHtml(arr) {
-  $('.datatable').html('').attr({'class': 'table datatable'});
-
-  try {
-    datatable.destroy();
-  } catch(e) {
-    //console.log('cant destroy');
-  }
-  datatable = $('.datatable').DataTable();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  });
 
   //TODO make loading bar
 

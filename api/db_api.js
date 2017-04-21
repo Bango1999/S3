@@ -10,6 +10,34 @@ const t = 'task';
 const DB = 'api/db/' + CONFIG.getDB();
 const BDB = 'api/db/' + CONFIG.getBDB();
 
+//helper function deTokenize:
+//takes token and id out of json before sending it to public
+function deTokenize(json) {
+  for (var i in json) {
+    json[i]['id'] = "redacted";
+    json[i]['token'] = "redacted";
+  }
+  return json;
+}
+
+//helper function addAircraft:
+//adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
+function addAircraft(json) {
+  json['whitelist'] = CONFIG.getAircraft();
+  return json;
+}
+
+//helper function integerIncrementNameHashes:
+//removes hashes from the stats json, could be somewhat private data
+function integerIncrementNameHashes(json) {
+  var id = 0;
+  for (var hash in json['stats']) { //for each hashed player node
+    json['stats'][id++] = json['stats'][hash]; //make a new node as integer ID
+    delete json['stats'][hash]; //delete the old hashed node
+  }
+  return json;
+}
+
 //helper function updateTokens:
 //update tokens in the db with whats in the config
 function updateTokens() {
@@ -43,6 +71,7 @@ function updateJson(json) {
     return 'Invalid Token, Aborting DB Update';
   } else { LOGGER.log('Token validated, server ID: ' + serverId, i) }
   LOGGER.log('Performing DB update and backup...',i);
+  json = integerIncrementNameHashes(json);
 
         //The second argument is used to tell the DB to save after each push
         //If you put false, you'll have to call the save() method.
@@ -58,23 +87,6 @@ function updateJson(json) {
       //https://github.com/Belphemur/node-json-db
       //Deleting data
       //db.delete("/info");
-}
-
-//helper function deTokenize:
-//takes token and id out of json before sending it to public
-function deTokenize(json) {
-  for (var i in json) {
-    json[i]['id'] = "redacted";
-    json[i]['token'] = "redacted";
-  }
-  return json;
-}
-
-//helper function addAircraft:
-//adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
-function addAircraft(json) {
-  json['whitelist'] = CONFIG.getAircraft();
-  return json;
 }
 
 //helper function getJson:
