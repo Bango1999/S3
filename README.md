@@ -13,7 +13,7 @@ But they need one of the tokens you create in this file!
 Runs web server on local port 4000, accepts POSTS to<br/>
 /api/dcs/slmod/update<br/>
 and<br/>
-/api/web/fetch directories
+/api/web/fetch
 
 The former route is for other repo to upload json to,<br/>
 The latter route is for the web server to query the json via ajax request.
