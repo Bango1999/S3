@@ -64,12 +64,22 @@ const aircraft = [
   // "P-51D",
   // "A-10C",
   // "CobraH",
+  "UH-1H",
   "SA342M",
   "SA342L",
-  "UH-1H",
   "Ka-50",
   "Mi-8MT"
 ];
+
+const killObjects = [
+  // 'Buildings',
+  'Planes',
+  'Ships',
+  'Ground Units',
+  'Helicopters'
+];
+
+const handleTag = '229) ';
 
 
 // default: '5mb'
@@ -96,7 +106,9 @@ module.exports = {
   getPort: function() { return port },
   getTokens: function() { return tokens },
   getDB: function() { return databaseName },
+  getHandleTag: function() { return handleTag },
   getAircraft: function() { return aircraft },
+  getKillObjects: function() { return killObjects },
   getBDB: function() { return backupDatabaseName },
   getPostJsonSizeLimit: function() { return postJsonSizeLimit }
 }

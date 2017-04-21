@@ -23,17 +23,48 @@ function deTokenize(json) {
 //helper function addAircraft:
 //adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
 function addAircraft(json) {
-  json['whitelist'] = CONFIG.getAircraft();
+  json['whitelistedAircraft'] = CONFIG.getAircraft();
+  return json;
+}
+
+//helper function addKillObjects:
+//adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
+function addKillObjects(json) {
+  json['whitelistedKillObjects'] = CONFIG.getKillObjects();
   return json;
 }
 
 //helper function integerIncrementNameHashes:
 //removes hashes from the stats json, could be somewhat private data
 function integerIncrementNameHashes(json) {
-  var id = 0;
+  var id = 1;
   for (var hash in json['stats']) { //for each hashed player node
     json['stats'][id++] = json['stats'][hash]; //make a new node as integer ID
     delete json['stats'][hash]; //delete the old hashed node
+  }
+  return json;
+}
+
+//helper function setDisplayNames:
+//helpful for units with standard handle tags
+function setDisplayNames(json) {
+  for (var pid in json['stats']) { //for each hashed player node
+    var lastName;
+    for (var id in json['stats'][pid]['names']) {
+      console.log(json['stats'][pid]['names'][id]);
+      var foundOfficial = false;
+      if (json['stats'][pid]['names'][id].indexOf(CONFIG.getHandleTag()) != -1) {
+        //console.log('found official');
+        json['stats'][pid]['name'] = json['stats'][pid]['names'][id];
+        foundOfficial = true;
+        break;
+      }
+      lastName = json['stats'][pid]['names'][id];
+    }
+    if (!foundOfficial) {
+      //console.log('didnt find official');
+      json['stats'][pid]['name'] = lastName;
+    }
   }
   return json;
 }
@@ -71,7 +102,6 @@ function updateJson(json) {
     return 'Invalid Token, Aborting DB Update';
   } else { LOGGER.log('Token validated, server ID: ' + serverId, i) }
   LOGGER.log('Performing DB update and backup...',i);
-  json = integerIncrementNameHashes(json);
 
         //The second argument is used to tell the DB to save after each push
         //If you put false, you'll have to call the save() method.
@@ -82,6 +112,8 @@ function updateJson(json) {
   catch(err) { return 'ERROR: Either the DB "'+ DB + '.json" does not exist, or there is no-thing "{}" within it' }
   backupdb.push('/', prevjson);
   LOGGER.log('Updated Backup DB',i);
+  json = integerIncrementNameHashes(json);
+  json = setDisplayNames(json);
   db.push('/server/'+json['id'], json);
   LOGGER.log('Updated Main DB',i);
       //https://github.com/Belphemur/node-json-db
@@ -98,7 +130,7 @@ function getJson() {
     LOGGER.log('ERROR: Either the DB "'+ DB + '.json" does not exist, or there is no ["server"] index within it',e);
     return false; //return empty object
   }
-  return addAircraft(deTokenize(json));
+  return addKillObjects(addAircraft(deTokenize(json)));
 }
 
 module.exports = {
