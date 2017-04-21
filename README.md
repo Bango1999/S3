@@ -10,15 +10,16 @@ Edit config.js according to your needs. There you can make your own set of token
 Each game server that runs [SLmod_S3](https://github.com/Bango1999/SLmod_S3) and [SLmod Stats Cron](https://github.com/Bango1999/SLSC) can send its Slmod Stats table to this server.<br/>
 But they need one of the tokens you create in this file!
 
-Runs web server on local port 4000, accepts POSTS to<br/>
-/api/dcs/slmod/update<br/>
-and<br/>
-/api/web/fetch
-
-The former route is for other repo to upload json to,<br/>
-The latter route is for the web server to query the json via ajax request.
-
 Access localhost:4000 in your browser to see the client-end
+
+Flags:
+- 'node server.js -v': verbose logging (recommended to get set up)
+- 'node server.js -s': no logging (silent) except for errors
+- 'node server.js -d': (default) normal logging
+
+WINDOWS ONLY EASE OF ACCESS:
+- you can run the app from the S3.bat file
+- you can create a shortcut to S3.bat and place it anywhere you want, and run from that
 
 ## Motivation
 
@@ -30,15 +31,15 @@ This could help IP's see logged hours, or just let people go and see their kills
 
 ## Installation
 
-install nodejs and npm if not already done<br />
-cd to repo<br />
-npm update<br />
-npm start
+- install nodejs and npm if not already done<br />
+- cd to repo<br />
+- 'npm update'<br />
+- 'npm start' or 'node cron.js' or run from one of the BAT files (WINDOWS ONLY)
 
 ## API Reference
 
-/api/dcs/slmod/update -> sends POST json to server<br />
-/api/web/fetch -> sends POST json to client
+- /api/dcs/slmod/update -> accepts POST JSON content
+- /api/web/fetch -> sends POST JSON content to client
 
 ## License
 
