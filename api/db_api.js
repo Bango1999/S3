@@ -1,8 +1,10 @@
 const jsondb = require('node-json-db');
 const CONFIG = require('../config.js');
 
+//helper function updateTokens:
+//update tokens in the db with whats in the config
 function updateTokens() {
-  var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
+  var db = new jsondb('api/db/' + CONFIG.getDB(), true, true);
   db.push('/token',CONFIG.getTokens());
 }
 updateTokens(); //do it now
@@ -10,7 +12,6 @@ updateTokens(); //do it now
 //helper function authorizeToken:
 //makes sure the update is valid
 function authorizeToken(id, token) {
-  //console.log('id='+id+'token='+token);
   var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
   var tokens = db.getData('/token');
   for (var i in tokens) {
@@ -24,18 +25,15 @@ function authorizeToken(id, token) {
 //helper function storejson:
 //updates the databases with new stats
 function updateJson(json) {
-  console.log('authenticating...');
   var serverId = authorizeToken(json['id'], json['token']);
   if (serverId === false) {
-    console.log('invalid token received. aborting');
     return "Invalid Token in updateJson";
-  } else {
-    //console.log('token validated, server ID: ' + serverId);
-  }
-  console.log('Performing DB update and backup...');
-    //The second argument is used to tell the DB to save after each push
-    //If you put false, you'll have to call the save() method.
-    //The third argument is to ask JsonDB to save the database in an human readable format. (default false)
+  } else { /*console.log('token validated, server ID: ' + serverId);*/ }
+  //console.log('Performing DB update and backup...');
+
+        //The second argument is used to tell the DB to save after each push
+        //If you put false, you'll have to call the save() method.
+        //The third argument is to ask JsonDB to save the database in an human readable format. (default false)
   var db = new jsondb('api/db/'+CONFIG.getDB(), true, true);
   var backupdb = new jsondb('api/db/'+CONFIG.getBDB(), true, true);
   try {
@@ -72,17 +70,16 @@ function addAircraft(json) {
 //helper function getJson:
 //returns the server json currently stored in the main db
 function getJson() {
-  var relevant = [];
   var fdb = new jsondb('api/db/'+CONFIG.getDB(), true, true);
-  var json = fdb.getData('/server');
+  try { var json = fdb.getData('/server') }
+  catch(err) {
+    console.log(err);
+    return {};
+  }
   return addAircraft(deTokenize(json));
 }
 
 module.exports = {
-  update: function(json) {
-    return updateJson(json);
-  },
-  getJson: function() {
-    return getJson();
-  }
+  update: function(json) { return updateJson(json) },
+  getJson: function() { return getJson() }
 };

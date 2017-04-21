@@ -90,31 +90,13 @@ const backupDatabaseName = 'db_backup';
 //DO NOT EDIT PAST THIS LINE
 
 
-
-
 module.exports = {
-  getName: function() {
-    return name
-  },
-  getLogo: function() {
-    return logo
-  },
-  getPort: function() {
-    return port
-  },
-  getTokens: function() {
-    return tokens
-  },
-  getAircraft: function() {
-    return aircraft
-  },
-  getPostJsonSizeLimit: function() {
-    return postJsonSizeLimit
-  },
-  getDB: function() {
-    return databaseName
-  },
-  getBDB: function() {
-    return backupDatabaseName
-  }
+  getName: function() { return name },
+  getLogo: function() { return logo },
+  getPort: function() { return port },
+  getTokens: function() { return tokens },
+  getDB: function() { return databaseName },
+  getAircraft: function() { return aircraft },
+  getBDB: function() { return backupDatabaseName },
+  getPostJsonSizeLimit: function() { return postJsonSizeLimit }
 }

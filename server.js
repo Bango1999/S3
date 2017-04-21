@@ -24,33 +24,27 @@ app.get('/', (req, res) => {
 //about page
 app.get('/about', (req, res) => {
   res.render('html/about', {
-      title: 'S3 About',
-      name: CONFIG.getName()
+    title: 'S3 About',
+    name: CONFIG.getName()
   });
 });
 
 //API for WEB View
 app.post('/api/web/fetch', (req, res) => {
   console.log('POST /api/web/fetch');
-   res.json(API.getJson()); //send them the data they need
+  res.json(API.getJson()); //send them the data they need
 });
 
-//API for DCS node_children
+//API for SLSC Server
 //update the database with new info
 app.post('/api/dcs/slmod/update', (req, res) => {
-  console.log('POST MISSION SERVER UPDATE:');
-  console.log('Server: ' + req.body['name'] + ' id:' + req.body['id']);
-  console.log('Access Token: ' + req.body['token']);
-  //send it the stats and server info
-  var error = API.update(req.body);
-  if (error) {
-    console.log('UPDATE FAILED!');
-    console.log('ERROR: ' + error);
-    res.end('fail'); //end transmission
-  } else {
-    console.log('Update Successful');
-    res.end('pass'); //end transmission
-  }
+  console.log('DCS Server Stats Received from Server [ ' + req.body.name + ' ] with ID [ ' + req.body.id + ' ]');
+  var err = API.update(req.body); //send it the stats and server info
+  if (err) {
+    console.log('API UPDATE ERROR: ');
+    console.log(err);
+    res.end('fail');
+  } else { res.end('pass') }
 
 });
 
