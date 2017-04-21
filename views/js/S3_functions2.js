@@ -9,6 +9,11 @@ $(document).ready(function() {
     dataType: "json",
     data: {},
     success: function(data) {
+      if (data === false) {
+        console.log('ERROR: Server could not return a valid database object.');
+        return;
+      }
+
       json = data;
       updateServersTable(data);
       $('.table-links').on('click', 'a', function(e) {
