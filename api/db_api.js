@@ -27,7 +27,7 @@ function authorizeToken(id, token) {
 function updateJson(json) {
   var serverId = authorizeToken(json['id'], json['token']);
   if (serverId === false) {
-    return "Invalid Token in updateJson";
+    return "Invalid Token, Aborting DB Update";
   } else { /*console.log('token validated, server ID: ' + serverId);*/ }
   //console.log('Performing DB update and backup...');
 

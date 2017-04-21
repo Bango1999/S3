@@ -38,10 +38,9 @@ app.post('/api/web/fetch', (req, res) => {
 //API for SLSC Server
 //update the database with new info
 app.post('/api/dcs/slmod/update', (req, res) => {
-  console.log('DCS Server Stats Received from Server [ ' + req.body.name + ' ] with ID [ ' + req.body.id + ' ]');
+  console.log('DCS Server Stats Received: "' + req.body.name + '", ID ' + req.body.id);
   var err = API.update(req.body); //send it the stats and server info
   if (err) {
-    console.log('API UPDATE ERROR: ');
     console.log(err);
     res.end('fail');
   } else { res.end('pass') }
