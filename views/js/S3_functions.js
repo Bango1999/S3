@@ -1,8 +1,7 @@
 $(document).ready(function() {
   //prolly dont need globals, but were good for 1.0
   var json = {};
-  var hoursCols, killsCols, deathsCols, statColumns;
-  var datatable;
+  var statColumns = {};
   var statTypes = ['Hours', 'Kills', 'Deaths'];
   $.ajax({
     url: "/api/web/fetch",
@@ -17,34 +16,24 @@ $(document).ready(function() {
 
       json = data;
 
-      hoursCols = json['whitelistedAircraft'];
-      hoursCols.unshift('Pilot');
-      var killsCols = json['whitelistedKillObjects'];
-      killsCols.unshift('Pilot');
-      killsCols.push('Infantry');
-      killsCols.push('PvP Kills');
-      killsCols.push('Friendly Kills');
-      deathsCols = [ "Pilot", "Deaths", "Crashes", "Ejections", "PvP Deaths" ];
-
-      statColumns = {
-        //hours list (send it whitelisted aircraft names)
-        'Hours':  hoursCols,
-        //kills list
-        'Kills': killsCols,
-        //deaths list
-        'Deaths': deathsCols
-      };
-
+      refreshColumnMappings(data);
       updateServersTable(data); //populate server list / actions
+
+      $('#loading-icon').bind('showTree', function() {
+        $(this).css({'padding-top':'35px','padding-bottom':'35px'});
+        $(this).show();
+      });
+      $('#loading-icon').bind('treeCreated', function() {
+        $(this).hide();
+        $(this).css({'padding-top':'0px','padding-bottom':'0px'});
+      });
+
       $('.tree-view').on('click', 'button', function() {
         $('#loading-icon').trigger('showTree');
         $('.tree-view button').hide();
         setTimeout(function() { showTree() }, 0);
       });
       $('.table-links').on('click', 'a', function(e) { tableToHTML(tabulate($(this).attr('data-id'), $(this).text())) });
-      $('#loading-icon').bind('showTree', function() { $(this).show() });
-      $('#loading-icon').bind('treeCreated', function() { $(this).hide() });
-
 
     }, //end success
     error: function(err) { console.log(err) }
@@ -72,7 +61,6 @@ $(document).ready(function() {
   //------------------------
 
   function showTree() {
-    console.log('showTree fn');
     $('#json-tree').removeAttr('style');
     $('#json-tree').jsonViewer(json, {collapsed: true}); //call tree view on the json
     $('#loading-icon').trigger('treeCreated');
@@ -141,8 +129,20 @@ $(document).ready(function() {
               var nameKey = columns[stat].indexOf(index);
               if (nameKey != -1) {
                 if (index == 'Ground Units') {
-                  table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'];
-                  table[pid][columns[stat].indexOf('Infantry')] = json[serverId]['stats'][pid][fli][index]['Infantry'];
+                  var nonInfantry = 0;
+                  for (var type in json[serverId]['stats'][pid][fli][index]) {
+                    if (type != 'total' && type != 'Infantry') {
+                      nonInfantry += parseInt(json[serverId]['stats'][pid][fli][index][type]);
+                    }
+                  }
+                  // console.log('---');
+                  // console.log(columns[stat].indexOf('Infantry'));
+                  // console.log(columns[stat].indexOf('Non-Infantry'));
+                  // console.log(columns[stat].indexOf('Ground Units'));
+                  table[pid][columns[stat].indexOf('Infantry')] = json[serverId]['stats'][pid][fli][index]['Infantry']; //set infantry
+                  table[pid][columns[stat].indexOf('Non-Infantry')] = nonInfantry; //set nonInfantry
+                  table[pid][columns[stat].indexOf('Ground Units')] = json[serverId]['stats'][pid][fli][index]['total']; //set total
+                  //console.log(table[pid][columns[stat].indexOf('Infantry')] + table[pid][columns[stat].indexOf('Non-Infantry')] + table[pid][columns[stat].indexOf('Ground Units')]);
                 } else if (fli == 'times') { table[pid][nameKey] = floatingPtHours(json[serverId]['stats'][pid][fli][index]['total']) }
                 else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] }
               }
@@ -220,6 +220,39 @@ $(document).ready(function() {
     $('#dt-container').append($('<table></table').attr({'class':'table datatable','id':'datatable'}));
     createTableHeader(arr[0]);
     createTableBody(arr);
-    var datatable = $('.datatable').DataTable();
+    $('#datatable').DataTable();
+  }
+
+  function refreshColumnMappings(json) {
+    //make  hours columns
+    var hoursCols = [];
+    Array.prototype.push.apply(hoursCols, json['whitelistedAircraft']);
+    hoursCols.unshift('Pilot');
+
+    //make kills columns
+    var killsCols = [];
+    Array.prototype.push.apply(killsCols, json['whitelistedKillObjects']);
+    killsCols.unshift('Friendly Kills');
+    killsCols.unshift('PvP Kills');
+    if (killsCols.indexOf('Ground Units') > -1) { //if theyre sending us ground units, make spots for both
+      killsCols.unshift('Non-Infantry');
+      killsCols.unshift('Infantry');
+    }
+    killsCols.unshift('Pilot');
+
+    //deaths columns are completely placid, there is no whitelist or variation needed
+    //but make them (again?) anyway since we are being all official
+    var deathsCols = [ "Pilot", "Deaths", "Crashes", "Ejections", "PvP Deaths" ];
+
+    //set the global stat columns
+    statColumns = {
+      //hours list (send it whitelisted aircraft names)
+      'Hours':  hoursCols,
+      //kills list
+      'Kills': killsCols,
+      //deaths list
+      'Deaths': deathsCols
+    };
+
   }
 });

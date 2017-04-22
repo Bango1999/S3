@@ -7,6 +7,12 @@ main {font-family: 'Slabo 27px', serif;}
 .server-name {font-family: 'Archivo Black', sans-serif;}
 .tree-view {margin-top: 70px;}
 .center {text-align:center}
+#loading-icon {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius:4px;
+}
+#json-tree { padding-left:20px; }
 .datatable {
   font-family: 'Open Sans', sans-serif;
   font-size: 1em;
