@@ -32,9 +32,7 @@ This could help IP's see logged hours, or just let people go and see their kills
 ## Installation
 
 - install nodejs and npm if not already done<br />
-- cd to repo<br />
-- 'npm update'<br />
-- 'npm start' or 'node cron.js' or run from one of the BAT files (WINDOWS ONLY)
+- (cd to repo, 'npm update' plus 'npm start' or 'node server.js'), or run from one of the BAT files (WINDOWS ONLY)
 
 ## API Reference
 
