@@ -20,7 +20,7 @@ $(document).ready(function() {
       updateServersTable(data); //populate server list / actions
 
       $('#loading-icon').bind('showTree', function() {
-        $(this).css({'padding-top':'35px','padding-bottom':'35px'});
+        $(this).css({'padding-top':'45px','padding-bottom':'35px'});
         $(this).show();
       });
       $('#loading-icon').bind('treeCreated', function() {
