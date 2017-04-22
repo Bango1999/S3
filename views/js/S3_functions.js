@@ -124,27 +124,18 @@ $(document).ready(function() {
 
           //here comes the messy part...
           if ((fli == 'times' && stat == statTypes[0]) || (fli == 'kills' && stat == statTypes[1])) {
-            //console.log('times'); //verbatim mappings, key > key
-            for (var index in json[serverId]['stats'][pid][fli]) { //table[-1] will have data...
+            for (var index in json[serverId]['stats'][pid][fli]) {
               var nameKey = columns[stat].indexOf(index);
               if (nameKey != -1) {
                 if (index == 'Ground Units') {
                   var nonInfantry = 0;
-                  for (var type in json[serverId]['stats'][pid][fli][index]) {
-                    if (type != 'total' && type != 'Infantry') {
-                      nonInfantry += parseInt(json[serverId]['stats'][pid][fli][index][type]);
-                    }
+                  for (var type in json[serverId]['stats'][pid][fli][index]) { //add up everything thats not infantry or total to be Ground Units
+                    if (type != 'total' && type != 'Infantry') { nonInfantry += parseInt(json[serverId]['stats'][pid][fli][index][type]) }
                   }
-                  // console.log('---');
-                  // console.log(columns[stat].indexOf('Infantry'));
-                  // console.log(columns[stat].indexOf('Non-Infantry'));
-                  // console.log(columns[stat].indexOf('Ground Units'));
                   table[pid][columns[stat].indexOf('Infantry')] = json[serverId]['stats'][pid][fli][index]['Infantry']; //set infantry
-                  table[pid][columns[stat].indexOf('Non-Infantry')] = nonInfantry; //set nonInfantry
-                  table[pid][columns[stat].indexOf('Ground Units')] = json[serverId]['stats'][pid][fli][index]['total']; //set total
-                  //console.log(table[pid][columns[stat].indexOf('Infantry')] + table[pid][columns[stat].indexOf('Non-Infantry')] + table[pid][columns[stat].indexOf('Ground Units')]);
+                  table[pid][columns[stat].indexOf('Ground Units')] = nonInfantry; //set total
                 } else if (fli == 'times') { table[pid][nameKey] = floatingPtHours(json[serverId]['stats'][pid][fli][index]['total']) }
-                else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] }
+                else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] } //is this necessary?
               }
             }
           } else if (fli == 'friendlyKills' && stat == statTypes[1]) { //Friendly Kills count nodes;
@@ -234,9 +225,8 @@ $(document).ready(function() {
     Array.prototype.push.apply(killsCols, json['whitelistedKillObjects']);
     killsCols.unshift('Friendly Kills');
     killsCols.unshift('PvP Kills');
-    if (killsCols.indexOf('Ground Units') > -1) { //if theyre sending us ground units, make spots for both
-      killsCols.unshift('Non-Infantry');
-      killsCols.unshift('Infantry');
+    if (killsCols.indexOf('Ground Units') > -1) {
+      killsCols.unshift('Infantry'); //if theyre sending us ground units, make a spot for infantry ground units
     }
     killsCols.unshift('Pilot');
 

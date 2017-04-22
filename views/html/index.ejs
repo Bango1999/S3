@@ -10,18 +10,8 @@
     </header>
 
     <main>
-        <div class="jumbotron">
-          <div class="row">
-            <div class="col-md-4 col-sm-4 col-xs-4">
-              <img src="assets/<%= logo %>" id="logo" />
-            </div>
-            <div class="col-md-8 col-sm-8 col-xs-8">
-              <h2 class="server-name"><%= name %></h2>
-              <div id="servers"></table>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <% include ../partials/S3 %>
 
       <div id="dt-container">
         <table class="table datatable" id="datatable"></table>
@@ -29,38 +19,8 @@
 
       <hr class="clear" />
 
-      <div class="tree-view" style="margin-top:0px;margin-bottom:0px">
-        <div class="center">
-          <button class="btn btn-primary center">Show Full Object Tree</button>
-        </div>
-        <div id="loading-icon" class="row" style="display:none">
-          <div class="col-md-4 col-xs-4">
-            <div class="loading-divs">
-              <div class="loading-divs">
-                <div class="loading-divs">
-                  <div class="loading-divs">
-                    <div class="loading-divs">
-                       <div class="loading-divs">
-                          <div class="loading-divs">
-                            <div class="loading-divs">
-                              <div class="loading-divs">
-                                <div class="loading-divs"></div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8 col-xs-8">
-            <strong>Working...</strong> Please be patient while parsing a large dataset
-          </div>
-        </div>
-        <pre id="json-tree" style="border:none;padding:0"></pre>
-      </div>
+      <% include ../partials/json %>
+
     </main>
 
     <footer>

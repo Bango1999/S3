@@ -1,20 +1,17 @@
 
-// default: '229th Server Stats'
 // what do you want to call your Web Server?
-const name = '229th Server Stats';
+const name = '229th Server Stats'; // default: '229th Server Stats'
 
 
 
-// default: 4000
-// on what port should I host your Web Server?
-const port = 4000;
+// do you need to run the server on a specific port?
+const port = 4000; // default: 4000
 
 
 
-// default: 'patch.png'
 // what is the name of the image you have stored in views/assets
-//  that will be displayed in the page header
-const logo = 'patch.png';
+//  that will be displayed in the page header?
+const logo = 'patch.png'; // default: 'patch.png'
 
 
 
@@ -36,12 +33,20 @@ const tokens = {
 
 
 /*
-   AIRCRAFT STATS WHITELIST
-    you dont want a column for every aircraft, or your table will be too wide.
-    comment out aircraft you dont want included in the hours list
+   AIRCRAFT HOURS STATS WHITELIST
+    you dont want an hours column for every single aircraft, or your table will be too wide.
+    comment out aircraft you dont want included in the hours column
 */
 const aircraft = [
   // "CA", //combined arms
+  "UH-1H",
+  "SA342M",
+  "SA342L",
+  "Ka-50",
+  "Mi-8MT",
+  "ah-64d",
+  "CobraH",
+  // "A-10C",
   // "IL-76MD",
   // "MiG-21Bis",
   // "AJS37",
@@ -50,7 +55,6 @@ const aircraft = [
   // "MiG-29S",
   // "FW-190D9",
   // "MiG-15bis",
-  // "ah-64d",
   // "SpitfireLFMkIX",
   // "L-39C",
   // "MiG-29A",
@@ -61,45 +65,41 @@ const aircraft = [
   // "F-5E-3",
   // "F-15C",
   // "F-86F Sabre",
-  // "P-51D",
-  // "A-10C",
-  // "CobraH",
-  "UH-1H",
-  "SA342M",
-  "SA342L",
-  "Ka-50",
-  "Mi-8MT"
+  // "P-51D"
 ];
 
+// KILL TYPE WHITELIST
 //what kind of kill stats do you want?
-const killObjects = [
-  // 'Buildings',
-  'Planes',
+const killObjects = [ // Note, if you enable Ground Units,
+  'Buildings',        // the web client will generate 2 columns,
+  'Planes',           // Infantry and Ground Units (non-infantry)
   'Ships',
   'Ground Units',
   'Helicopters'
 ];
 
-//what do you want to search to try to find a default player name?
-const handleTag = '229) ';
+// What do you want to search to try to find a default player name?
+// This code will find '229) ' in (A/229) Huckleberry, and set that as their default player name.
+// Otherwise, it will be the last name in their list of names
+const handleTag = '229) '; // note, if you dont want to use it, just make it something really obscure like '%#^$(*HHHJKV*())'
 
 
-// default: '5mb'
 // This needs to be sufficiently large to fit a growing slmod dataset
-const postJsonSizeLimit = '5mb';
+const postJsonSizeLimit = '5mb'; // default: '5mb'
 
 
-// default: 'db'
 // what do you want to call your database?
-const databaseName = 'db';
+const databaseName = 'db'; // default: 'db'
 
-// default: 'db_backup'
 // what do you want to call your backup database?
-const backupDatabaseName = 'db_backup';
+const backupDatabaseName = 'db_backup'; // default: 'db_backup'
 
 
 //----------------------------------------------
 //DO NOT EDIT PAST THIS LINE
+
+
+
 
 
 module.exports = {

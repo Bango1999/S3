@@ -1,12 +1,15 @@
+body { color:#333; }
 main {font-family: 'Slabo 27px', serif;}
 .btn {font-family:'Open Sans', sans-serif}
 .larger {font-size: 1.5em;}
 .clear {clear:both;}
 .table-links a:hover {cursor: pointer;}
-.jumbotron h2 {text-align:center;}
-.server-name {font-family: 'Archivo Black', sans-serif;}
+.well h2 {text-align:center;margin-top:0;}
+.server-name {font-family: 'Boogaloo', sans-serif; font-size:2.5em;color:#333;}
 .tree-view {margin-top: 70px;}
+.loading-text { font-family: 'Open Sans', sans-serif; }
 .center {text-align:center}
+.navbar-brand { padding: 11px 15px; }
 #loading-icon {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
@@ -36,12 +39,17 @@ main {font-family: 'Slabo 27px', serif;}
   padding: 10px;
   font-size:1.3em;
 }
+.server-list-row:nth-child(odd) {
+  background: #eee;
+}
 .server-list-row-header {
   text-align: center;
   padding: 5px;
   font-size: 1.5em;
-  border: 1px solid black;
+  border-bottom: 1px solid black;
   background: #ccc;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
 }
 
 
