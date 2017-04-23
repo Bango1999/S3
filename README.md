@@ -2,7 +2,7 @@
 
 Web-facing end of SLmod, to be paired with my other repo [SLmod Stats Cron](https://github.com/Bango1999/SLSC), which runs locally on each DCS game server which is running my modded version of SLmod, [SLmod_S3](https://github.com/Bango1999/SLmod_S3), waiting for new data to send to this server.
 
-[See the Demo](http://1stcav.servegame.com:229/)
+[See it in action](http://stats.229ahb.com:4000/)
 
 ## Usage
 
@@ -18,8 +18,8 @@ Flags:
 - 'node server.js -d': (default) normal logging
 
 WINDOWS ONLY EASE OF ACCESS:
-- you can run the app from the S3.bat file
-- you can create a shortcut to S3.bat and place it anywhere you want, and run from that
+- you can run the app from any of the S3.bat files
+- you can create shortcuts to the S3.bat and place them anywhere you want, and run from that
 
 ## Motivation
 
@@ -31,8 +31,25 @@ This could help IP's see logged hours, or just let people go and see their kills
 
 ## Installation
 
-- install nodejs and npm if not already done<br />
-- (cd to repo, 'npm update' plus 'npm start' or 'node server.js'), or run from one of the BAT files (WINDOWS ONLY)
+1) Install node.js (full installer .msi file for Windows)<br />
+   https://nodejs.org/en/download/<br/>
+   or in linux (apt-get/yum install nodejs)
+
+2) from a terminal, git clone https://github.com/Bango1999/S3.git
+
+3a) If Windows, go to the project folder you just cloned in file explorer and run the file Update_S3.bat<br/>
+3b) If not Windows, stay inside the terminal and run 'npm update'
+
+6) Edit config.js in a text editor.<br />
+   At the top of the file, you will see a bunch of 'const' variables.<br />
+   Set them according to your personal server/setup. Defaults should mostly be fine.
+
+7a) If Windows, run the file S3_Debug.bat
+7b) If not Windows, test by running 'node server.js -v' in the cmd prompt window<br />
+    By default it will run once a minute, so be patient while you wait for it to log its first attempt.<br />
+    When you start seeing logs, use them to troubleshoot or confirm everything is working.
+    ctrl + c to terminate the node application running in the cmd window.
+
 
 ## API Reference
 
