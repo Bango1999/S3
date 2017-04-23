@@ -127,7 +127,9 @@ function getJson() {
   var fdb = new jsondb(DB, true, true);
   try { var json = fdb.getData('/server') }
   catch(err) {
-    LOGGER.log('ERROR: Either the DB "'+ DB + '.json" does not exist, or there is no ["server"] index within it',e);
+    LOGGER.log('ERROR: Trying to send data to web client, but no data is available.',i);
+    LOGGER.log('(Have you started recieving SLmod Stats data yet from any SLSC servers?)',i);
+    LOGGER.log('Technical info: Either the DB "'+ DB + '.json" does not exist, or there is no ["server"] index within it',i);
     return false; //return empty object
   }
   return addKillObjects(addAircraft(deTokenize(json)));

@@ -1,5 +1,5 @@
 {
-  "name": "S3",
+  "name": "s3",
   "version": "1.0.0",
   "description": "Web-facing end of SLmod, to be paired with my other repo slmod change listener",
   "main": "server.js",

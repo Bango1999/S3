@@ -1,4 +1,15 @@
-const express = require('express');
+try {
+  const express = require('express');
+} catch(e) {
+  console.log('');
+  console.log('Slow down there, Slick! You most likely still need to run the command "npm update"');
+  console.log('( or execute the "NPM_Update.bat" file in the project root folder )');
+  console.log('');
+  console.log('Otherwise, the real issue is that I cannot successfully "require(\'express\')" at the top of server.js');
+  console.log('');
+  return;
+}
+express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
