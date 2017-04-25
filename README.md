@@ -44,10 +44,10 @@ This could help IP's see logged hours, or just let people go and see their kills
    At the top of the file, you will see a bunch of 'const' variables.<br />
    Set them according to your personal server/setup. Defaults should mostly be fine.
 
-7a) If Windows, run the file S3_Debug.bat
+7a) If Windows, run the file S3_Debug.bat<br />
 7b) If not Windows, test by running 'node server.js -v' in the cmd prompt window<br />
     By default it will run once a minute, so be patient while you wait for it to log its first attempt.<br />
-    When you start seeing logs, use them to troubleshoot or confirm everything is working.
+    When you start seeing logs, use them to troubleshoot or confirm everything is working.<br/>
     ctrl + c to terminate the node application running in the cmd window.
 
 
