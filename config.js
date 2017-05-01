@@ -34,8 +34,8 @@ const tokens = {
 
 /*
    AIRCRAFT HOURS STATS WHITELIST
-    you dont want an hours column for every single aircraft, or your table will be too wide.
-    comment out aircraft you dont want included in the hours column
+    you dont want a column for every single aircraft, or your table will be too wide.
+    comment out aircraft you dont want included in the Hours table
 */
 const aircraft = [
   // "CA", //combined arms

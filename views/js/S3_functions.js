@@ -124,6 +124,7 @@ $(document).ready(function() {
 
           //here comes the messy part...
           if ((fli == 'times' && stat == statTypes[0]) || (fli == 'kills' && stat == statTypes[1])) {
+            var totalHrs = 0;
             for (var index in json[serverId]['stats'][pid][fli]) {
               var nameKey = columns[stat].indexOf(index);
               if (nameKey != -1) {
@@ -134,10 +135,16 @@ $(document).ready(function() {
                   }
                   table[pid][columns[stat].indexOf('Infantry')] = json[serverId]['stats'][pid][fli][index]['Infantry']; //set infantry
                   table[pid][columns[stat].indexOf('Ground Units')] = nonInfantry; //set total
-                } else if (fli == 'times') { table[pid][nameKey] = floatingPtHours(json[serverId]['stats'][pid][fli][index]['total']) }
+                } else if (fli == 'times') {
+                  var hrs = json[serverId]['stats'][pid][fli][index]['total'];
+                  totalHrs += hrs;
+                  table[pid][nameKey] = floatingPtHours(hrs);
+                }
                 else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] } //is this necessary?
               }
             }
+            //if its Hours, populate total whitelisted airframe hours if thats a stat we want
+            if (stat == statTypes[0] && columns[stat].indexOf('Total') != -1) { table[pid][columns[stat].indexOf('Total')] = floatingPtHours(totalHrs) }
           } else if (fli == 'friendlyKills' && stat == statTypes[1]) { //Friendly Kills count nodes;
             if (json[serverId]['stats'][pid][fli]) { table[pid][columns[stat].indexOf('Friendly Kills')] = Object.keys(json[serverId]['stats'][pid][fli]).length }
             else { table[pid][columns[stat].indexOf('Friendly Kills')] = 0 }
@@ -218,6 +225,7 @@ $(document).ready(function() {
     //make  hours columns
     var hoursCols = [];
     Array.prototype.push.apply(hoursCols, json['whitelistedAircraft']);
+    hoursCols.unshift('Total');
     hoursCols.unshift('Pilot');
 
     //make kills columns
