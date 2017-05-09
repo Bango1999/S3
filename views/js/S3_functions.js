@@ -1,10 +1,10 @@
 $(document).ready(function() {
   //prolly dont need globals, but were good for 1.0
-  var json = {};
-  var statColumns = {};
-  var statTypes = [
-    'All Rotorcraft Hours',
-    'US Aircraft Hours',
+  var json = {}; //global var to store the json we get from ajax
+  var statColumns = {}; //will hold what columns need to go in which tables
+  var statTypes = [ //used later on as keys to build statColumns
+    'All Rotorcraft Hours', //also used to build dropdown selector for each server
+    'US Aircraft Hours', //also used in tabulate and getFirstLevelIndices
     'RU Aircraft Hours',
     'Other Aircraft Hours',
     'Player Kills',
@@ -44,8 +44,16 @@ $(document).ready(function() {
       });
       //user clicks a show table action, display the table they requested
       $('.table-actions').on('change', 'select', function(e) {
-        if ($(this).find("option:selected").attr('data-id') !== 'false') { tableToHTML(tabulate($(this).find("option:selected").attr('data-id'), $(this).find("option:selected").attr('value'))) }
-        else {console.log('false claims against the republic')}
+        var dId = $(this).find("option:selected").attr('data-id');
+        var val = $(this).find("option:selected").attr('value');
+        if (dId !== 'false') {
+          $('.table-actions select').each(function() {
+            if ($(this).find('option').eq(1).attr('data-id') != dId) {
+              $(this).val($(this).find('option:first').val());
+            }
+          })
+          tableToHTML(tabulate(dId, val));
+        }
       });
 
     }, //end success
@@ -116,11 +124,6 @@ $(document).ready(function() {
               .append($('<option></option>').attr({'value':statTypes[3],'data-id':i}).text(statTypes[3]))
               .append($('<option></option>').attr({'value':statTypes[4],'data-id':i}).text(statTypes[4]))
               .append($('<option></option>').attr({'value':statTypes[5],'data-id':i}).text(statTypes[5]))
-            // .append($('<a></a>').attr({'data-id':i}).text(statTypes[0]))
-            // .append($('<span></span>').text(' | '))
-            // .append($('<a></a>').attr({'data-id':i}).text(statTypes[1]))
-            // .append($('<span></span>').text(' | '))
-            // .append($('<a></a>').attr({'data-id':i}).text(statTypes[2]))
           )
         )
       );
@@ -147,7 +150,6 @@ $(document).ready(function() {
           //ways
     var firstLevelIndices = getFirstLevelIndices(stat);
     if (firstLevelIndices == false) { console.log("ERROR getting first level indices");return false;}
-    console.log(firstLevelIndices);
     for (var pid in json[serverId]['stats']) { //loop through player nodes
       for (var fli in json[serverId]['stats'][pid]) { //loop through stats for player
         if (firstLevelIndices.indexOf(fli) != -1) { //we want something from here
@@ -257,48 +259,51 @@ $(document).ready(function() {
     $('#datatable').DataTable();
   }
 
+  //-------------------------
+
   function refreshColumnMappings(json) {
-    var arch = [
-      "UH-1H",
-      "SA342M",
-      "SA342L",
-      "Ka-50",
-      "Mi-8MT",
-      "ah-64d",
-      "CobraH"
+    //these are some of the table-specific columns we will need to look for in the json
+    var arch = [ //all rotorcraft hours
+      'UH-1H',
+      'ah-64d',
+      'CobraH',
+      'Ka-50',
+      'Mi-8MT',
+      'SA342L',
+      'SA342M'
     ];
-    var usach = [
-      "A-10C",
-      "F-5E-3",
-      "F-15C",
-      "F-86F Sabre",
-      "P-51D"
+    var usach = [ //us aircraft hours
+      'A-10C',
+      'F-15C',
+      'F-5E-3',
+      'F-86F Sabre',
+      'P-51D'
     ];
-    var ruach = [
-      "IL-76MD",
-      "MiG-21Bis",
-      "Su-25",
-      "Su-27",
-      "MiG-29S",
-      "MiG-15bis",
-      "MiG-29A",
-      "Su-25T"
+    var ruach = [ //ru aircraft hours
+      'IL-76MD',
+      'MiG-15bis',
+      'MiG-21Bis',
+      'MiG-29A',
+      'MiG-29S',
+      'Su-25',
+      'Su-25T',
+      'Su-27'
     ];
-    var oach = [
-      "AJS37",
-      "FW-190D9",
-      "SpitfireLFMkIX",
-      "L-39C",
-      "L-39ZA",
-      "M-2000C",
-      "Bf-109K-4"
+    var oach = [ //other aircraft hours
+      'AJS37',
+      'Bf-109K-4',
+      'FW-190D9',
+      'L-39C',
+      'L-39ZA',
+      'M-2000C',
+      'SpitfireLFMkIX'
     ];
     var killObjects = [
-      'Buildings',        // the web client will generate 2 columns,
+      'Ground Units',     // the web client will generate 2 columns,
       'Planes',           // Infantry and Ground Units (non-infantry)
+      'Helicopters',
       'Ships',
-      'Ground Units',
-      'Helicopters'
+      'Buildings'
     ];
 
 
@@ -308,19 +313,19 @@ $(document).ready(function() {
     allRotorcraftHoursCols.unshift('Total');
     allRotorcraftHoursCols.unshift('Pilot');
 
-    //make  heli hours columns
+    //make  us ac hours columns
     var usAircraftHoursCols = [];
     Array.prototype.push.apply(usAircraftHoursCols, usach);
     usAircraftHoursCols.unshift('Total');
     usAircraftHoursCols.unshift('Pilot');
 
-    //make  heli hours columns
+    //make  ru ac hours columns
     var ruAircraftHoursCols = [];
     Array.prototype.push.apply(ruAircraftHoursCols, ruach);
     ruAircraftHoursCols.unshift('Total');
     ruAircraftHoursCols.unshift('Pilot');
 
-    //make  heli hours columns
+    //make  other ac hours columns
     var oAircraftHoursCols = [];
     Array.prototype.push.apply(oAircraftHoursCols, oach);
     oAircraftHoursCols.unshift('Total');
@@ -329,8 +334,8 @@ $(document).ready(function() {
     //make kills columns
     var killsCols = [];
     Array.prototype.push.apply(killsCols, killObjects);
-    killsCols.unshift('Friendly Kills');
-    killsCols.unshift('PvP Kills');
+    killsCols.push('PvP Kills');
+    killsCols.push('Friendly Kills');
     if (killsCols.indexOf('Ground Units') > -1) {
       killsCols.unshift('Infantry'); //if theyre sending us ground units, make a spot for infantry ground units
     }
@@ -341,14 +346,13 @@ $(document).ready(function() {
     var deathsCols = [ "Pilot", "Deaths", "Crashes", "Ejections", "PvP Deaths" ];
 
     //set the global stat columns
-    statColumns = {
-      'All Rotorcraft Hours':  allRotorcraftHoursCols, //columns in heli hours table
-      'US Aircraft Hours':  usAircraftHoursCols, //columns in US aircraft hours table
-      'RU Aircraft Hours':  ruAircraftHoursCols, //columns in US aircraft hours table
-      'Other Aircraft Hours':  oAircraftHoursCols, //columns in US aircraft hours table
-      'Player Kills': killsCols,
-      'Player Deaths': deathsCols
-    };
+    statColumns = {};
+    statColumns[statTypes[0]] = allRotorcraftHoursCols;
+    statColumns[statTypes[1]] = usAircraftHoursCols;
+    statColumns[statTypes[2]] = ruAircraftHoursCols;
+    statColumns[statTypes[3]] = oAircraftHoursCols;
+    statColumns[statTypes[4]] = killsCols;
+    statColumns[statTypes[5]] = deathsCols;
 
   }
 });
