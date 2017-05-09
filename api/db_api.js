@@ -20,20 +20,6 @@ function deTokenize(json) {
   return json;
 }
 
-//helper function addAircraft:
-//adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
-function addAircraft(json) {
-  json['whitelistedAircraft'] = CONFIG.getAircraft();
-  return json;
-}
-
-//helper function addKillObjects:
-//adds aircraft whitelist from config, so only relevant aircraft flight hrs shown
-function addKillObjects(json) {
-  json['whitelistedKillObjects'] = CONFIG.getKillObjects();
-  return json;
-}
-
 //helper function integerIncrementNameHashes:
 //removes hashes from the stats json, could be somewhat private data
 function integerIncrementNameHashes(json) {
@@ -132,7 +118,7 @@ function getJson() {
     LOGGER.log('Technical info: Either the DB "'+ DB + '.json" does not exist, or there is no ["server"] index within it',i);
     return false; //return empty object
   }
-  return addKillObjects(addAircraft(deTokenize(json)));
+  return deTokenize(json);
 }
 
 module.exports = {

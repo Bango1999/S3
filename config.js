@@ -32,52 +32,6 @@ const tokens = {
 
 
 
-/*
-   AIRCRAFT HOURS STATS WHITELIST
-    you dont want a column for every single aircraft, or your table will be too wide.
-    comment out aircraft you dont want included in the Hours table
-*/
-const aircraft = [
-  // "CA", //combined arms
-  "UH-1H",
-  "SA342M",
-  "SA342L",
-  "Ka-50",
-  "Mi-8MT",
-  "ah-64d",
-  "CobraH",
-  // "A-10C",
-  // "IL-76MD",
-  // "MiG-21Bis",
-  // "AJS37",
-  // "Su-25",
-  // "Su-27",
-  // "MiG-29S",
-  // "FW-190D9",
-  // "MiG-15bis",
-  // "SpitfireLFMkIX",
-  // "L-39C",
-  // "MiG-29A",
-  // "L-39ZA",
-  // "M-2000C",
-  // "Su-25T",
-  // "Bf-109K-4",
-  // "F-5E-3",
-  // "F-15C",
-  // "F-86F Sabre",
-  // "P-51D"
-];
-
-// KILL TYPE WHITELIST
-//what kind of kill stats do you want?
-const killObjects = [ // Note, if you enable Ground Units,
-  'Buildings',        // the web client will generate 2 columns,
-  'Planes',           // Infantry and Ground Units (non-infantry)
-  'Ships',
-  'Ground Units',
-  'Helicopters'
-];
-
 // What do you want to search to try to find a default player name?
 // This code will find '229) ' in (A/229) Huckleberry, and set that as their default player name.
 // Otherwise, it will be the last name in their list of names
