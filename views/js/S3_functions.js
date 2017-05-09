@@ -1,24 +1,34 @@
 $(document).ready(function() {
   //prolly dont need globals, but were good for 1.0
-  var json = {};
-  var statColumns = {};
-  var statTypes = ['Hours', 'Kills', 'Deaths'];
+  var json = {}; //global var to store the json we get from ajax
+  var statColumns = {}; //will hold what columns need to go in which tables
+  var statTypes = [ //used later on as keys to build statColumns
+    'All Rotorcraft Hours', //also used to build dropdown selector for each server
+    'US Aircraft Hours', //also used in tabulate and getFirstLevelIndices
+    'RU Aircraft Hours',
+    'Other Aircraft Hours',
+    'Player Kills',
+    'Player Deaths'
+  ];
+
+  //ajax request to get data to populate tables with
+  //fire immediately on doc ready
   $.ajax({
     url: "/api/web/fetch",
     type: "POST",
     dataType: "json",
     data: {},
+    //on successful data reception, we can now show the data and make it all functional
     success: function(data) {
       if (data === false) {
         console.log('ERROR: Server could not return a valid database object.');
         return;
       }
-
-      json = data;
-
-      refreshColumnMappings(data);
+      json = data; //make the data global just in case we need it later
+      refreshColumnMappings(data); //make all the columns for each type of table
       updateServersTable(data); //populate server list / actions
 
+      //register lodaing icon events and when to start/stop
       $('#loading-icon').bind('showTree', function() {
         $(this).css({'padding-top':'45px','padding-bottom':'35px'});
         $(this).show();
@@ -27,13 +37,24 @@ $(document).ready(function() {
         $(this).hide();
         $(this).css({'padding-top':'0px','padding-bottom':'0px'});
       });
-
       $('.tree-view').on('click', 'button', function() {
         $('#loading-icon').trigger('showTree');
         $('.tree-view button').hide();
         setTimeout(function() { showTree() }, 0);
       });
-      $('.table-links').on('click', 'a', function(e) { tableToHTML(tabulate($(this).attr('data-id'), $(this).text())) });
+      //user clicks a show table action, display the table they requested
+      $('.table-actions').on('change', 'select', function(e) {
+        var dId = $(this).find("option:selected").attr('data-id');
+        var val = $(this).find("option:selected").attr('value');
+        if (dId !== 'false') {
+          $('.table-actions select').each(function() {
+            if ($(this).find('option').eq(1).attr('data-id') != dId) {
+              $(this).val($(this).find('option:first').val());
+            }
+          })
+          tableToHTML(tabulate(dId, val));
+        }
+      });
 
     }, //end success
     error: function(err) { console.log(err) }
@@ -48,9 +69,18 @@ $(document).ready(function() {
         return ['times'];
         break;
       case statTypes[1]:
-        return ['kills','friendlyKills','PvP'];
+        return ['times'];
         break;
       case statTypes[2]:
+        return ['times'];
+        break;
+      case statTypes[3]:
+        return ['times'];
+        break;
+      case statTypes[4]:
+        return ['kills','friendlyKills','PvP'];
+        break;
+      case statTypes[5]:
         return ['losses', 'PvP'];
         break;
       default:
@@ -81,20 +111,22 @@ $(document).ready(function() {
         )
     );
     for (var i in data) { //for each server
-      if (i !== 'whitelistedAircraft' && i !== 'whitelistedKillObjects') {
-        servers.append(
-          $('<div></div>').addClass('row').addClass('server-list-row').append(
-            $('<div></div>').text(data[i]['name']).addClass('col-md-8 col-sm-8 col-xs-8') //add the row for server
-          ).append( //add actions
-            $('<div></div>').addClass('table-links').addClass('col-md-4 col-sm-4 col-xs-4')
-              .append($('<a></a>').attr({'data-id':i}).text(statTypes[0]))
-              .append($('<span></span>').text(' | '))
-              .append($('<a></a>').attr({'data-id':i}).text(statTypes[1]))
-              .append($('<span></span>').text(' | '))
-              .append($('<a></a>').attr({'data-id':i}).text(statTypes[2]))
+      servers.append(
+        $('<div></div>').addClass('row').addClass('server-list-row').append(
+          $('<div></div>').text(data[i]['name']).addClass('col-md-8 col-sm-8 col-xs-8') //add the row for server
+        ).append( //add actions
+          $('<div></div>').addClass('table-actions').addClass('col-md-4 col-sm-4 col-xs-4').append(
+            $('<select></select>').addClass('form-control input-md')
+              .append($('<option></option>').attr({'value':'false','data-id':'false'}).text('-PLEASE SELECT-'))
+              .append($('<option></option>').attr({'value':statTypes[0],'data-id':i}).text(statTypes[0]))
+              .append($('<option></option>').attr({'value':statTypes[1],'data-id':i}).text(statTypes[1]))
+              .append($('<option></option>').attr({'value':statTypes[2],'data-id':i}).text(statTypes[2]))
+              .append($('<option></option>').attr({'value':statTypes[3],'data-id':i}).text(statTypes[3]))
+              .append($('<option></option>').attr({'value':statTypes[4],'data-id':i}).text(statTypes[4]))
+              .append($('<option></option>').attr({'value':statTypes[5],'data-id':i}).text(statTypes[5]))
           )
-        );
-      }
+        )
+      );
     }
     //console.log('updated servers table');
   }
@@ -117,13 +149,16 @@ $(document).ready(function() {
           //differnt
           //ways
     var firstLevelIndices = getFirstLevelIndices(stat);
+    if (firstLevelIndices == false) { console.log("ERROR getting first level indices");return false;}
     for (var pid in json[serverId]['stats']) { //loop through player nodes
       for (var fli in json[serverId]['stats'][pid]) { //loop through stats for player
         if (firstLevelIndices.indexOf(fli) != -1) { //we want something from here
 
 
           //here comes the messy part...
-          if ((fli == 'times' && stat == statTypes[0]) || (fli == 'kills' && stat == statTypes[1])) {
+
+          //Kills table, 'kills' node content derivation
+          if (fli == 'kills' && stat == statTypes[4]) {
             for (var index in json[serverId]['stats'][pid][fli]) {
               var nameKey = columns[stat].indexOf(index);
               if (nameKey != -1) {
@@ -134,20 +169,31 @@ $(document).ready(function() {
                   }
                   table[pid][columns[stat].indexOf('Infantry')] = json[serverId]['stats'][pid][fli][index]['Infantry']; //set infantry
                   table[pid][columns[stat].indexOf('Ground Units')] = nonInfantry; //set total
-                } else if (fli == 'times') { table[pid][nameKey] = floatingPtHours(json[serverId]['stats'][pid][fli][index]['total']) }
-                else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] } //is this necessary?
+                } else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] }
               }
             }
-          } else if (fli == 'friendlyKills' && stat == statTypes[1]) { //Friendly Kills count nodes;
+          //Hours Table, 'times' node content derivation
+          } else if (fli == 'times' && (stat == statTypes[0] || stat == statTypes[1] || stat == statTypes[2] || stat == statTypes[3])) {
+            var totalHrs = 0;
+            for (var index in json[serverId]['stats'][pid][fli]) {
+              var nameKey = columns[stat].indexOf(index);
+              if (nameKey != -1) {
+                totalHrs += json[serverId]['stats'][pid][fli][index]['total'];
+                table[pid][nameKey] = floatingPtHours(json[serverId]['stats'][pid][fli][index]['total']);
+              }
+            }
+            //populate total airframe hours (in this category)
+            table[pid][columns[stat].indexOf('Total')] = floatingPtHours(totalHrs)
+          } else if (fli == 'friendlyKills' && stat == statTypes[4]) { //Friendly Kills count nodes;
             if (json[serverId]['stats'][pid][fli]) { table[pid][columns[stat].indexOf('Friendly Kills')] = Object.keys(json[serverId]['stats'][pid][fli]).length }
             else { table[pid][columns[stat].indexOf('Friendly Kills')] = 0 }
-          } else if (fli == 'losses' && stat == statTypes[2]) { //pilotDeath > Deaths, crash > Crashes, eject > Ejections
+          } else if (fli == 'losses' && stat == statTypes[5]) { //pilotDeath > Deaths, crash > Crashes, eject > Ejections
             table[pid][columns[stat].indexOf('Deaths')] = json[serverId]['stats'][pid][fli]['pilotDeath'];
             table[pid][columns[stat].indexOf('Crashes')] = json[serverId]['stats'][pid][fli]['crash'];
             table[pid][columns[stat].indexOf('Ejections')] = json[serverId]['stats'][pid][fli]['eject'];
-          } else if (fli == 'PvP' && stat == statTypes[1]) { //kills > PvP Kills
+          } else if (fli == 'PvP' && stat == statTypes[4]) { //kills > PvP Kills
             table[pid][columns[stat].indexOf('PvP Kills')] = json[serverId]['stats'][pid][fli]['kills'];
-          } else if (fli == 'PvP' && stat == statTypes[2]) { //losses > PvP Deaths
+          } else if (fli == 'PvP' && stat == statTypes[5]) { //losses > PvP Deaths
             table[pid][columns[stat].indexOf('PvP Deaths')] = json[serverId]['stats'][pid][fli]['losses'];
           }
 
@@ -163,7 +209,6 @@ $(document).ready(function() {
   //------------------------
 
   function tabulate(serverId, stat) {
-    //console.log(statColumns);
     var table = [];
     table[0] = statColumns[stat];
     for (var player in json[serverId]['stats']) {
@@ -214,17 +259,83 @@ $(document).ready(function() {
     $('#datatable').DataTable();
   }
 
+  //-------------------------
+
   function refreshColumnMappings(json) {
-    //make  hours columns
-    var hoursCols = [];
-    Array.prototype.push.apply(hoursCols, json['whitelistedAircraft']);
-    hoursCols.unshift('Pilot');
+    //these are some of the table-specific columns we will need to look for in the json
+    var arch = [ //all rotorcraft hours
+      'UH-1H',
+      'ah-64d',
+      'CobraH',
+      'Ka-50',
+      'Mi-8MT',
+      'SA342L',
+      'SA342M'
+    ];
+    var usach = [ //us aircraft hours
+      'A-10C',
+      'F-15C',
+      'F-5E-3',
+      'F-86F Sabre',
+      'P-51D'
+    ];
+    var ruach = [ //ru aircraft hours
+      'IL-76MD',
+      'MiG-15bis',
+      'MiG-21Bis',
+      'MiG-29A',
+      'MiG-29S',
+      'Su-25',
+      'Su-25T',
+      'Su-27'
+    ];
+    var oach = [ //other aircraft hours
+      'AJS37',
+      'Bf-109K-4',
+      'FW-190D9',
+      'L-39C',
+      'L-39ZA',
+      'M-2000C',
+      'SpitfireLFMkIX'
+    ];
+    var killObjects = [
+      'Ground Units',     // the web client will generate 2 columns,
+      'Planes',           // Infantry and Ground Units (non-infantry)
+      'Helicopters',
+      'Ships',
+      'Buildings'
+    ];
+
+
+    //make  heli hours columns
+    var allRotorcraftHoursCols = [];
+    Array.prototype.push.apply(allRotorcraftHoursCols, arch);
+    allRotorcraftHoursCols.unshift('Total');
+    allRotorcraftHoursCols.unshift('Pilot');
+
+    //make  us ac hours columns
+    var usAircraftHoursCols = [];
+    Array.prototype.push.apply(usAircraftHoursCols, usach);
+    usAircraftHoursCols.unshift('Total');
+    usAircraftHoursCols.unshift('Pilot');
+
+    //make  ru ac hours columns
+    var ruAircraftHoursCols = [];
+    Array.prototype.push.apply(ruAircraftHoursCols, ruach);
+    ruAircraftHoursCols.unshift('Total');
+    ruAircraftHoursCols.unshift('Pilot');
+
+    //make  other ac hours columns
+    var oAircraftHoursCols = [];
+    Array.prototype.push.apply(oAircraftHoursCols, oach);
+    oAircraftHoursCols.unshift('Total');
+    oAircraftHoursCols.unshift('Pilot');
 
     //make kills columns
     var killsCols = [];
-    Array.prototype.push.apply(killsCols, json['whitelistedKillObjects']);
-    killsCols.unshift('Friendly Kills');
-    killsCols.unshift('PvP Kills');
+    Array.prototype.push.apply(killsCols, killObjects);
+    killsCols.push('PvP Kills');
+    killsCols.push('Friendly Kills');
     if (killsCols.indexOf('Ground Units') > -1) {
       killsCols.unshift('Infantry'); //if theyre sending us ground units, make a spot for infantry ground units
     }
@@ -235,14 +346,13 @@ $(document).ready(function() {
     var deathsCols = [ "Pilot", "Deaths", "Crashes", "Ejections", "PvP Deaths" ];
 
     //set the global stat columns
-    statColumns = {
-      //hours list (send it whitelisted aircraft names)
-      'Hours':  hoursCols,
-      //kills list
-      'Kills': killsCols,
-      //deaths list
-      'Deaths': deathsCols
-    };
+    statColumns = {};
+    statColumns[statTypes[0]] = allRotorcraftHoursCols;
+    statColumns[statTypes[1]] = usAircraftHoursCols;
+    statColumns[statTypes[2]] = ruAircraftHoursCols;
+    statColumns[statTypes[3]] = oAircraftHoursCols;
+    statColumns[statTypes[4]] = killsCols;
+    statColumns[statTypes[5]] = deathsCols;
 
   }
 });
