@@ -54,8 +54,8 @@ Default cron recurrence is 1 minute, but if you set it to a longer interval, it 
 
 7) Access your S3 instance in a browser to verify stats are viewable from the client side (default localhost:4000)
 
-Networking Step:
-8) If you are hosting S3 from home, you may have to configure your router to forward port 80 to your S3 instance.
+8) [Networking Step] If you are hosting S3 from home, you may have to configure your router to forward port 80 to your S3 instance.
+
 Example:
    - Find the local ip of the machine running S3 (should look like 192.168.x.x)
    - Forward external port 80 (normal web traffic) to your local IP, on internal port 4000 (default port in config.js)
