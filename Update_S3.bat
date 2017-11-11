@@ -1,14 +1,17 @@
 @echo off
-If Not Exist updater.hashfile call certUtil -hashfile config.js md5 > updater.hashfile
-call certUtil -hashfile config.js md5 > updater_temp.hashfile
-call FC updater.hashfile updater_temp.hashfile >NUL && set stash=0 || set stash=1
-del /f updater_temp.hashfile
-if "%stash%" == "1" (call git stash)
-echo S3 Updating...
+for /f %%i in ('call git status --porcelain') do set stash=%%i
+if not [%stash%] == [] (
+  echo Stashing local changes...
+  call git add .
+  call git stash -q
+)
+echo Updating S3 App...
 call git pull origin master
-call certUtil -hashfile config.js md5 > updater.hashfile
-if "%stash%" == "1" (call git stash apply)
-echo S3 Updating Dependencies...
+if not [%stash%] == [] (
+  echo Restoring local changes...
+  call git stash apply -q
+)
+echo Updating S3 Dependencies...
 call npm update
 echo Done
 pause
