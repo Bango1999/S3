@@ -40,7 +40,7 @@ $(document).ready(function() {
       $('.tree-view').on('click', 'button', function() {
         $('#loading-icon').trigger('showTree');
         $('.tree-view button').hide();
-        setTimeout(function() { showTree() }, 0);
+        setTimeout(function() { showTree() }, 5);
       });
       //user clicks a show table action, display the table they requested
       $('.table-actions').on('change', 'select', function(e) {
