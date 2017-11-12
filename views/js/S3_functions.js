@@ -53,6 +53,9 @@ $(document).ready(function() {
             }
           })
           tableToHTML(tabulate(dId, val));
+        } else if ( $.fn.DataTable.isDataTable('#datatable') ) {
+          $('#datatable').DataTable().destroy();
+          $('#datatable').empty();
         }
       });
 
@@ -117,7 +120,7 @@ $(document).ready(function() {
         ).append( //add actions
           $('<div></div>').addClass('table-actions').addClass('col-md-4 col-sm-4 col-xs-4').append(
             $('<select></select>').addClass('form-control input-md')
-              .append($('<option></option>').attr({'value':'false','data-id':'false'}).text('-PLEASE SELECT-'))
+              .append($('<option></option>').attr({'value':'false','data-id':'false'}).text('-'))
               .append($('<option></option>').attr({'value':statTypes[0],'data-id':i}).text(statTypes[0]))
               .append($('<option></option>').attr({'value':statTypes[1],'data-id':i}).text(statTypes[1]))
               .append($('<option></option>').attr({'value':statTypes[2],'data-id':i}).text(statTypes[2]))
@@ -249,8 +252,7 @@ $(document).ready(function() {
   function tableToHTML(arr) {
     if ( $.fn.DataTable.isDataTable('#datatable') ) {
       $('#datatable').DataTable().destroy();
-      $('#datatable head').empty();
-      $('#datatable tbody').empty();
+      $('#datatable').empty();
     }
     $('#dt-container').html('');
     $('#dt-container').append($('<table></table').attr({'class':'table datatable','id':'datatable'}));
