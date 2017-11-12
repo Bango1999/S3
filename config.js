@@ -1,6 +1,6 @@
 
 // what do you want to call your Web Server?
-const name = '229th Server Stats'; // default: '229th Server Stats'
+const name = '229th Flight Log'; // default: '229th Flight Log'
 
 
 
@@ -39,7 +39,7 @@ const handleTag = '229) '; // note, if you dont want to use it, just make it som
 
 
 // This needs to be sufficiently large to fit a growing slmod dataset
-const postJsonSizeLimit = '5mb'; // default: '5mb'
+const postJsonSizeLimit = '20mb'; // default: '20mb'
 
 
 // what do you want to call your database?
@@ -62,9 +62,9 @@ module.exports = {
   getPort: function() { return port },
   getTokens: function() { return tokens },
   getDB: function() { return databaseName },
-  getHandleTag: function() { return handleTag },
   getAircraft: function() { return aircraft },
-  getKillObjects: function() { return killObjects },
+  getHandleTag: function() { return handleTag },
   getBDB: function() { return backupDatabaseName },
+  getKillObjects: function() { return killObjects },
   getPostJsonSizeLimit: function() { return postJsonSizeLimit }
 }
