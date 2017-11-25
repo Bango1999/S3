@@ -24,8 +24,7 @@
                 <img src="https://i58.servimg.com/u/f58/19/53/72/50/close_10.jpg" alt="" class="img-responsive">
                 </div>
                 <div class="col-md-8">
-                    <p>Smod Statistics Server is a JSON Database API and frontend web interface for use with a modified version of SLmod, called SLmodS3</p>
-                    <p>The way the table is generated in the web interface limits the data so that only certain stats are displayed.  The SlmodStats.lua table, which houses game server data has much more info inside of it than is actually displayed currently.</p>
+                    <p>SLmod Statistics Server (S3) is a JSON Database API and frontend web interface that utilizes game data saved via Speed's Lua Mod (SLmod).</p>
                     <p><a class="btn btn-primary" href="https://github.com/Bango1999/S3">View on GitHub</a>
                     </p>
                 </div>
@@ -48,11 +47,11 @@
 
                 </div>
                 <div class="col-md-8">
-                    <p>This is not the only web server that needs to be run for a functioning system.</p>
-                    <p>Many game servers can upload their statistical data to S3 via its SLmod API.  Each DCS game server you run which runs my SLmod variant, SLmod_S3, will also be required to run a small node.js cron server alongside it, called SLSC (Slmod Statistics Crontask)</p>
-                    <p>SLmod_S3 will make a copy of your stats, SLSC will see the copy and upload it to S3</p>
+                    <p>This is not the only web server that needs to be run for a fully-functioning system.</p>
+                    <p>Many game servers can upload their statistical data to S3 via its SLmod API.  Each DCS game server you host which runs SLmod will also be required to run a small node.js cron server alongside it, called Slmod Statistics Crontask (SLSC)</p>
+                    <p>SLmod generates your game statistics, and SLSC checks periodically for new data, and uploads it to S3 if necessary.</p>
                     <p>
-                      <a class="btn btn-primary" href="https://github.com/Bango1999/SLSC">SLSC</a>&nbsp;&nbsp;<a class="btn btn-primary" href="https://github.com/Bango1999/SLmod_S3">SLmod_S3</a>
+                      <a class="btn btn-primary" href="https://github.com/Bango1999/SLSC">SLSC</a>&nbsp;&nbsp;<a class="btn btn-primary" href="https://github.com/mrSkortch/DCS-SLmod/tree/develop">SLmod</a>
                     </p>
                 </div>
             </div>
