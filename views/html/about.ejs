@@ -11,6 +11,19 @@
 
     <main>
 
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <div class="jumbotron  jumbotron-fluid">
+            <h1 class="blackops larger">TL;DR</h1>
+            <ol class="lead">
+              <li><span style="font-weight:bold">SLmod</span> generates DCS player statistics, and</li>
+              <li><span style="font-weight:bold">SLSC</span> checks periodically for new data, and uploads it to</li>
+              <li><span style="font-weight:bold">S3</span> if necessary, where you can view it online.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
 
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -24,9 +37,9 @@
                 <img src="https://i58.servimg.com/u/f58/19/53/72/50/close_10.jpg" alt="" class="img-responsive">
                 </div>
                 <div class="col-md-8">
-                    <p>SLmod Statistics Server (S3) is a JSON Database API and frontend web interface that utilizes game data saved via Speed's Lua Mod (SLmod).</p>
-                    <p><a class="btn btn-primary" href="https://github.com/Bango1999/S3">View on GitHub</a>
-                    </p>
+                  <p>SLmod Statistics Server (S3) is a JSON Database API and frontend web interface that utilizes players' in-game statistics, saved via Speed's Lua Mod (SLmod).</p>
+                  <p><a class="btn btn-primary" href="https://github.com/Bango1999/S3">S3 on GitHub</a>
+                  </p>
                 </div>
             </div>
         </div>
@@ -47,11 +60,11 @@
 
                 </div>
                 <div class="col-md-8">
-                    <p>This is not the only web server that needs to be run for a fully-functioning system.</p>
-                    <p>Many game servers can upload their statistical data to S3 via its SLmod API.  Each DCS game server you host which runs SLmod will also be required to run a small node.js cron server alongside it, called Slmod Statistics Crontask (SLSC)</p>
-                    <p>SLmod generates your game statistics, and SLSC checks periodically for new data, and uploads it to S3 if necessary.</p>
+                    <p>S3 is not the only service that needs to be run for a fully-functioning system.</p>
+                    <p>Multiple DCS game servers can upload their statistical data to S3 via an API.  Each DCS game server you host which runs SLmod will also be required to run a small node.js cron service alongside it, called Slmod Statistics Crontask (SLSC)</p>
+                    <p>So <span style="font-weight:bold">SLmod</span> generates your game statistics, and <span style="font-weight:bold">SLSC</span> checks periodically for new data, and uploads it to <span style="font-weight:bold">S3</span> if necessary, where you can view it online.</p>
                     <p>
-                      <a class="btn btn-primary" href="https://github.com/Bango1999/SLSC">SLSC</a>&nbsp;&nbsp;<a class="btn btn-primary" href="https://github.com/mrSkortch/DCS-SLmod/tree/develop">SLmod</a>
+                      <a class="btn btn-primary" href="https://github.com/Bango1999/SLSC">SLSC on Github</a>&nbsp;&nbsp;<a class="btn btn-primary" href="https://github.com/mrSkortch/DCS-SLmod/tree/develop">SLmod on Github</a>
                     </p>
                 </div>
             </div>
