@@ -7,7 +7,7 @@ SLSC is another node.js server which runs locally on each DCS game server, and p
 
 S3 then, keeps track of the current stats data for all the SLSC servers which are sending it data. S3 also acts as the front end website which can be publicly accessed to view stats for the servers.
 
-[See it in action](http://stats.229ahb.com:4000/)
+[See it in action](http://webdev.science:229)
 
 ## Usage
 
