@@ -19,7 +19,10 @@
 
       <hr class="clear" />
 
-      <% include ../partials/json %>
+      <%if (treeView) { %>
+	    <% include ../partials/json %>
+      <% } %>
+      
 
     </main>
 
