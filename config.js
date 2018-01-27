@@ -37,6 +37,10 @@ const tokens = {
 // Otherwise, it will be the last name in their list of names
 const handleTag = '229) '; // note, if you dont want to use it, just make it something really obscure like '%#^$(*HHHJKV*())'
 
+// Do you want to enable the button to show the stats in Tree View?
+// NOTE: This is resource intensive, and freezes some browsers while the tree is generated
+const treeView = true; // default: true
+
 
 // This needs to be sufficiently large to fit a growing slmod dataset
 const postJsonSizeLimit = '20mb'; // default: '20mb'
@@ -64,6 +68,7 @@ module.exports = {
   getDB: function() { return databaseName },
   getAircraft: function() { return aircraft },
   getHandleTag: function() { return handleTag },
+  getTreeView: function() { return treeView },
   getBDB: function() { return backupDatabaseName },
   getKillObjects: function() { return killObjects },
   getPostJsonSizeLimit: function() { return postJsonSizeLimit }
