@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
         title: 'S3 ' + CONFIG.getName(),
         name: CONFIG.getName(),
         logo: CONFIG.getLogo(),
-		treeView: CONFIG.getTreeView()
+        treeView: CONFIG.getTreeView()
     });
 });
 //serve about page
