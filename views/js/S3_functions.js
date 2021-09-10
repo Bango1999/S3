@@ -239,19 +239,11 @@ $(document).ready(function() {
             let Deaths = 0;
             let Crashes = 0;
             let Ejections = 0;
-            console.log('twf');
             for (var index in json[serverId]['stats'][pid][fli]) {
-              console.log(index);
               if (checkNested(json[serverId]['stats'][pid][fli][index],
               'actions',
               'losses',
               'pilotDeath'
-              ))
-                Deaths += json[serverId]['stats'][pid][fli][index]['actions']['losses']['pilotDeath'];
-              if (checkNested(json[serverId]['stats'][pid][fli][index],
-              'actions',
-              'losses',
-              'crashLanding'
               ))
                 Deaths += json[serverId]['stats'][pid][fli][index]['actions']['losses']['pilotDeath'];
               if (checkNested(json[serverId]['stats'][pid][fli][index],
