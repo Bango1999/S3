@@ -81,10 +81,10 @@ $(document).ready(function() {
         return ['times'];
         break;
       case statTypes[4]:
-        return ['kills','friendlyKills','PvP'];
+        return ['times'];
         break;
       case statTypes[5]:
-        return ['losses', 'PvP'];
+        return ['times'];
         break;
       default:
         return false;
@@ -141,6 +141,12 @@ $(document).ready(function() {
     return (Math.round((100*val/3600))/100); //floating pt hours
   }
 
+  function checkNested(obj, level,  ...rest) {
+    if (obj === undefined) return false
+    if (rest.length == 0 && obj.hasOwnProperty(level)) return true
+    return checkNested(obj[level], ...rest)
+  }
+
 
   //------------------------
 
@@ -156,25 +162,67 @@ $(document).ready(function() {
     for (var pid in json[serverId]['stats']) { //loop through player nodes
       for (var fli in json[serverId]['stats'][pid]) { //loop through stats for player
         if (firstLevelIndices.indexOf(fli) != -1) { //we want something from here
-
-
           //here comes the messy part...
 
           //Kills table, 'kills' node content derivation
-          if (fli == 'kills' && stat == statTypes[4]) {
+          if (fli == 'times' && stat == statTypes[4]) {
+
+            let Infantry = 0;
+            let GroundUnits = 0;
+            let Planes = 0;
+            let Helicopters = 0;
+            let Ships = 0;
+            let Buildings = 0;
+            let PvPKills = 0;
+            let FriendlyKills = 0;
             for (var index in json[serverId]['stats'][pid][fli]) {
-              var nameKey = columns[stat].indexOf(index);
-              if (nameKey != -1) {
-                if (index == 'Ground Units') {
-                  var nonInfantry = 0;
-                  for (var type in json[serverId]['stats'][pid][fli][index]) { //add up everything thats not infantry or total to be Ground Units
-                    if (type != 'total' && type != 'Infantry') { nonInfantry += parseInt(json[serverId]['stats'][pid][fli][index][type]) }
-                  }
-                  table[pid][columns[stat].indexOf('Infantry')] = json[serverId]['stats'][pid][fli][index]['Infantry']; //set infantry
-                  table[pid][columns[stat].indexOf('Ground Units')] = nonInfantry; //set total
-                } else { table[pid][nameKey] = json[serverId]['stats'][pid][fli][index]['total'] }
-              }
+
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'kills',
+              'Ground Units',
+              'Infantry'
+              ))
+                Infantry += json[serverId]['stats'][pid][fli][index]['kills']['Ground Units']['Infantry'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'kills',
+              'Ground Units',
+              'total'
+              ))
+                GroundUnits += json[serverId]['stats'][pid][fli][index]['kills']['Ground Units']['total'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'kills',
+              'Planes',
+              'total'
+              ))
+                Planes += json[serverId]['stats'][pid][fli][index]['kills']['Planes']['total'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'kills',
+              'Helicopters',
+              'total'
+              ))
+                Helicopters += json[serverId]['stats'][pid][fli][index]['kills']['Helicopters']['total'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'kills',
+              'Ships',
+              'total'
+              ))
+                Ships += json[serverId]['stats'][pid][fli][index]['kills']['Ships']['total'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'kills',
+              'Buildings',
+              'total'
+              ))
+                Buildings += json[serverId]['stats'][pid][fli][index]['kills']['Buildings']['total'];
             }
+
+            table[pid][columns[stat].indexOf('Infantry')] = Infantry;
+            table[pid][columns[stat].indexOf('Ground Units')] = GroundUnits;
+            table[pid][columns[stat].indexOf('Planes')] = Planes;
+            table[pid][columns[stat].indexOf('Helicopters')] = Helicopters;
+            table[pid][columns[stat].indexOf('Ships')] = Ships;
+            table[pid][columns[stat].indexOf('Buildings')] = Buildings;
+            table[pid][columns[stat].indexOf('PvP Kills')] = 'N/A';
+            table[pid][columns[stat].indexOf('Friendly Kills')] = 'N/A';
           //Hours Table, 'times' node content derivation
           } else if (fli == 'times' && (stat == statTypes[0] || stat == statTypes[1] || stat == statTypes[2] || stat == statTypes[3])) {
             var totalHrs = 0;
@@ -186,25 +234,55 @@ $(document).ready(function() {
               }
             }
             //populate total airframe hours (in this category)
-            table[pid][columns[stat].indexOf('Total')] = floatingPtHours(totalHrs)
-          } else if (fli == 'friendlyKills' && stat == statTypes[4]) { //Friendly Kills count nodes;
-            if (json[serverId]['stats'][pid][fli]) { table[pid][columns[stat].indexOf('Friendly Kills')] = Object.keys(json[serverId]['stats'][pid][fli]).length }
-            else { table[pid][columns[stat].indexOf('Friendly Kills')] = 0 }
-          } else if (fli == 'losses' && stat == statTypes[5]) { //pilotDeath > Deaths, crash > Crashes, eject > Ejections
-            table[pid][columns[stat].indexOf('Deaths')] = json[serverId]['stats'][pid][fli]['pilotDeath'];
-            table[pid][columns[stat].indexOf('Crashes')] = json[serverId]['stats'][pid][fli]['crash'];
-            table[pid][columns[stat].indexOf('Ejections')] = json[serverId]['stats'][pid][fli]['eject'];
-          } else if (fli == 'PvP' && stat == statTypes[4]) { //kills > PvP Kills
-            table[pid][columns[stat].indexOf('PvP Kills')] = json[serverId]['stats'][pid][fli]['kills'];
-          } else if (fli == 'PvP' && stat == statTypes[5]) { //losses > PvP Deaths
-            table[pid][columns[stat].indexOf('PvP Deaths')] = json[serverId]['stats'][pid][fli]['losses'];
-          }
+            table[pid][columns[stat].indexOf('Total')] = floatingPtHours(totalHrs);
+          } else if (fli == 'times' && stat == statTypes[5]) { //pilotDeath > Deaths, crash > Crashes, eject > Ejections
+            let Deaths = 0;
+            let Crashes = 0;
+            let Ejections = 0;
+            console.log('twf');
+            for (var index in json[serverId]['stats'][pid][fli]) {
+              console.log(index);
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'actions',
+              'losses',
+              'pilotDeath'
+              ))
+                Deaths += json[serverId]['stats'][pid][fli][index]['actions']['losses']['pilotDeath'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'actions',
+              'losses',
+              'crashLanding'
+              ))
+                Deaths += json[serverId]['stats'][pid][fli][index]['actions']['losses']['pilotDeath'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'actions',
+              'losses',
+              'crash'
+              ))
+                Crashes += json[serverId]['stats'][pid][fli][index]['actions']['losses']['crash'];
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'actions',
+              'losses',
+              'crashLanding'
+              ))
+                Crashes += json[serverId]['stats'][pid][fli][index]['actions']['losses']['crashLanding']
+              if (checkNested(json[serverId]['stats'][pid][fli][index],
+              'actions',
+              'losses',
+              'eject'
+              ))
+                Ejections += json[serverId]['stats'][pid][fli][index]['actions']['losses']['eject'];
+            }
 
-
+            table[pid][columns[stat].indexOf('Deaths')] = Deaths;
+            table[pid][columns[stat].indexOf('Crashes')] = Crashes;
+            table[pid][columns[stat].indexOf('Ejections')] = Ejections;
+            table[pid][columns[stat].indexOf('PvP Deaths')] = 'N/A';
         }
-      }
+      } //times
+    }// end of player stats
 
-    }
+    } //end of players list
     //console.log(table);
     return table;
   }
